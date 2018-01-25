@@ -1,7 +1,5 @@
 package frc.team4180;
 
-//package org.usfirst.frc.team4180.robot;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,9 +16,9 @@ public class DriveTrain {
         gearShifting = new DoubleSolenoid(gearShiftPort1, gearShiftPort2);
     }
 
-    public void updateSpeed(/*LambdaJoystick.ThrottlePosition throttlePosition*/) {
-        double left =0;// -throttlePosition.y - throttlePosition.x;
-        double right = 0;//throttlePosition.y - throttlePosition.x;
+    public void updateSpeed(LambdaJoystick.ThrottlePosition throttlePosition) {
+        double left = -throttlePosition.y - throttlePosition.x;
+        double right = throttlePosition.y - throttlePosition.x;
         leftVictor.set(backwards ? left : right);
         rightVictor.set(backwards ? right : left);
     }

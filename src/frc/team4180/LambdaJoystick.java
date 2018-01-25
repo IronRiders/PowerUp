@@ -1,7 +1,5 @@
 package frc.team4180;
 
-//package org.usfirst.frc.team4180.robot;
-
 import java.util.function.Consumer;
 
 public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
