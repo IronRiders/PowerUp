@@ -1,5 +1,6 @@
 package frc.team4180;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -15,54 +16,42 @@ public enum AutonomousMode {
     /**
      * Slowly move forward
      */
-    JUST_DRIVE_FORWARD;
+    DRIVE_FORWARD;
+
+    // If you're on autonomous, you don't (shouldn't) need to worry about anything below
 
     /**
-     * Keeps track of which mode we're in
+     * The entry in the backing NetworkTable which holds the driver's selected mode
      */
-    private static AutonomousMode currentMode = DO_NOTHING;
+    private static final NetworkTableEntry selectedMode = SmartDashboard.getEntry("/SmartDashboard/autonomous/selected");
 
     /**
-     * Gets the current mode
-     * This method will first check wether the driver has
-     * selected a new mode, and if so switches to that mode.
+     * Gets the current mode from the backing network table
      * @return the current mode
      */
     public static AutonomousMode getCurrentMode() {
-        updateMode();
-        return currentMode;
+        return valueOf(selectedMode.getValue().getString());
     }
 
     /**
-     * Set's the current mode, and logs this through the network tables
+     * Sets the current entry in the backing NetworkTable
      * @param mode The mode to set currentMode to
      */
     public static void setCurrentMode(final AutonomousMode mode) {
-        currentMode = mode;
-        SmartDashboard.putString("/SmartDashboard/currentlySelectedMode", currentMode.name());
+        selectedMode.setString(mode.name());
     }
 
     /**
-     * Adds all the modes to NetworkTables, so they can be chosen from on the dashboard
+     * Adds all the modes to the backing NetworkTable, so they can be chosen from on the dashboard
+     * Also sets the selected mode in the NetworkTable to
      */
-    public static void initializeNetworkTables() {
+    public static void initializeNetworkTables(final AutonomousMode initialMode) {
         final AutonomousMode[] modes = values();
         final String[] modeNames = new String[modes.length];
         for (int i = 0; i < modes.length; i++) {
             modeNames[i] = modes[i].name();
         }
         SmartDashboard.putStringArray("/SmartDashboard/autonomous/modes", modeNames);
-    }
-
-    /**
-     * Queries NetworkTables to see if the mode has been changed.
-     * If so, set the current mode to the user selected mode
-     */
-    public static void updateMode() {
-        final String mode_name = SmartDashboard.getString("/SmartDashboard/autonomous/selected", currentMode.name());
-        if(!mode_name.equals(currentMode.name())) {
-            final AutonomousMode mode = valueOf(mode_name);
-            setCurrentMode(mode);
-        }
+        SmartDashboard.putString("/SmartDashboard/autonomous/selected", initialMode.name());
     }
 }

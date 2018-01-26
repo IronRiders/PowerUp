@@ -1,6 +1,7 @@
 package frc.team4180;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import static frc.team4180.AutonomousMode.*;
 
 public class Robot extends IterativeRobot 
 {
@@ -9,7 +10,7 @@ public class Robot extends IterativeRobot
     @Override
     public void robotInit() 
     {
-        AutonomousMode.initializeNetworkTables();
+        AutonomousMode.initializeNetworkTables(DO_NOTHING);
     }
 
     @Override
@@ -22,7 +23,7 @@ public class Robot extends IterativeRobot
     {
         switch (AutonomousMode.getCurrentMode()) {
             case DO_NOTHING: break;
-            case JUST_DRIVE_FORWARD:
+            case DRIVE_FORWARD:
                 driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0.1, 0.1));
                 break;
         }
