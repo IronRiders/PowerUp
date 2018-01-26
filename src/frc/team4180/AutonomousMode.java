@@ -24,9 +24,12 @@ public enum AutonomousMode {
 
     /**
      * Gets the current mode
+     * This method will first check wether the driver has
+     * selected a new mode, and if so switches to that mode.
      * @return the current mode
      */
     public static AutonomousMode getCurrentMode() {
+        updateMode();
         return currentMode;
     }
 
@@ -53,15 +56,13 @@ public enum AutonomousMode {
 
     /**
      * Queries NetworkTables to see if the mode has been changed.
-     * If so, set the current mode
-     * @return The new mode which has been set
+     * If so, set the current mode to the user selected mode
      */
-    public static AutonomousMode updateMode() {
+    public static void updateMode() {
         final String mode_name = SmartDashboard.getString("/SmartDashboard/autonomous/selected", currentMode.name());
         if(!mode_name.equals(currentMode.name())) {
             final AutonomousMode mode = valueOf(mode_name);
             setCurrentMode(mode);
         }
-        return currentMode;
     }
 }
