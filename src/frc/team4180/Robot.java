@@ -5,7 +5,7 @@ import static frc.team4180.AutonomousMode.*;
 
 public class Robot extends IterativeRobot 
 {
-    private final DriveTrain driveTrain = new DriveTrain(-1, -1, -1, -1);
+    private final DriveTrain driveTrain = new DriveTrain(-1, -1);
 
     @Override
     public void robotInit() 
