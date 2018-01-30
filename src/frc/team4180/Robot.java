@@ -6,6 +6,7 @@ import static frc.team4180.AutonomousMode.*;
 public class Robot extends IterativeRobot 
 {
     private final DriveTrain driveTrain = new DriveTrain(-1, -1);
+    private final PositioningSystem positioningSystem = new PositioningSystem();
 
     @Override
     public void robotInit() 
@@ -36,6 +37,13 @@ public class Robot extends IterativeRobot
 
     @Override
     public void testPeriodic() 
+    {
+        positioningSystem.riemann();
+        positioningSystem.logPosition();
+    }
+
+    @Override
+    public void testInit()
     {
     }
 }
