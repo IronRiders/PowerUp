@@ -1,33 +1,28 @@
 package frc.team4180;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import static frc.team4180.AutonomousMode.*;
 
 public class Robot extends IterativeRobot 
 {
     private final DriveTrain driveTrain = new DriveTrain(-1, -1);
+    private final Auto auto = new Auto();
     private final PositioningSystem positioningSystem = new PositioningSystem();
 
     @Override
     public void robotInit() 
     {
-        AutonomousMode.initializeNetworkTables(DO_NOTHING);
+        AutonomousMode.initialize();
     }
 
     @Override
     public void autonomousInit() 
     {
+        auto.init(driveTrain);
     }
 
     @Override
     public void autonomousPeriodic()
     {
-        switch (AutonomousMode.getCurrentMode()) {
-            case DO_NOTHING: break;
-            case DRIVE_FORWARD:
-                driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0.1, 0.1));
-                break;
-        }
     }
 
     @Override

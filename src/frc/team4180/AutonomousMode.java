@@ -1,23 +1,22 @@
 package frc.team4180;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This enum defines the different modes we can do in autonomous time
- * It also provides some methods for checking if the driver has changed modes,
- * and for displaying modes to the driver.
+ * Objects of this class represents different states during autonomous time
  */
 public class AutonomousMode {
     enum StartingPosition { LEFT, CENTER, RIGHT }
-    enum SwitchPosition {LEFT , RIGHT}
+    enum SwitchPosition { LEFT, RIGHT }
 
-    private StartingPosition startingPosition;
-    private SwitchPosition switchPosition;
+    private static SwitchPosition matchDataPosition;
+    public final StartingPosition startingPosition;
+    public final SwitchPosition switchPosition;
 
-    public AutonomousMode(StartingPosition startingPosition , SwitchPosition switchPosition) {
-        this.startingPosition = startingPosition;
+    private AutonomousMode(SwitchPosition switchPosition, StartingPosition startingPosition) {
         this.switchPosition = switchPosition;
+        this.startingPosition = startingPosition;
     }
 
     @Override
@@ -28,37 +27,38 @@ public class AutonomousMode {
     }
 
     /**
-     * The entry in the backing NetworkTable which holds the driver's selected mode
+     * @return the current autonomous mode, fetching the starting position from the dashboard
      */
-    private static final NetworkTableEntry selectedMode = SmartDashboard.getEntry("/SmartDashboard/autonomous/selected");
-
-    /**
-     * Gets the current mode from the backing network table
-     * @return the current mode
-     */
-    public static AutonomousMode getCurrentMode() {
-        return valueOf(selectedMode.getValue().getString());
-    }
-
-    /**
-     * Sets the current entry in the backing NetworkTable
-     * @param mode The mode to set currentMode to
-     */
-    public static void setCurrentMode(final AutonomousMode mode) {
-        selectedMode.setString(mode.name());
-    }
-
-    /**
-     * Adds all the modes to the backing NetworkTable, so they can be chosen from on the dashboard
-     * Also sets the selected mode in the NetworkTable to
-     */
-    public static void initializeNetworkTables(final AutonomousMode initialMode) {
-        final AutonomousMode[] modes = values();
-        final String[] modeNames = new String[modes.length];
-        for (int i = 0; i < modes.length; i++) {
-            modeNames[i] = modes[i].name();
+    public static AutonomousMode getAutonomousMode() {
+        final String startingPositionString = SmartDashboard.getString("/SmartDashboard/autonomous/selected_starting_position", null);
+        if(startingPositionString == null) {
+            throw new IllegalStateException("Invalid starting position from dashboard.");
         }
-        SmartDashboard.putStringArray("/SmartDashboard/autonomous/modes", modeNames);
-        SmartDashboard.putString("/SmartDashboard/autonomous/selected", initialMode.name());
+        final StartingPosition startingPosition = StartingPosition.valueOf(startingPositionString);
+        return new AutonomousMode(matchDataPosition, startingPosition);
+    }
+
+    /**
+     * Uses the gameSpecificMessage to set matchDataPosition
+     * Also tells the dashboard all the possible StartingPositions
+     */
+    public static void initialize() {
+        switch(DriverStation.getInstance().getGameSpecificMessage().charAt(0)) {
+            case 'L':
+                matchDataPosition = SwitchPosition.LEFT;
+                break;
+            case 'R':
+                matchDataPosition = SwitchPosition.RIGHT;
+                break;
+            default:
+                throw new IllegalStateException("Invalid game data");
+        }
+
+        final StartingPosition[] startingPositions = StartingPosition.values();
+        final String[] startingPositionNames = new String[startingPositions.length];
+        for(int i = 0; i < startingPositions.length; i++) {
+            startingPositionNames[i] = startingPositions[i].name();
+        }
+        SmartDashboard.putStringArray("/SmartDashboard/autonomous/starting_positions", startingPositionNames);
     }
 }
