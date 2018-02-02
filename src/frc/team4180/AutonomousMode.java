@@ -8,17 +8,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * It also provides some methods for checking if the driver has changed modes,
  * and for displaying modes to the driver.
  */
-public enum AutonomousMode {
-    /**
-     * Don't move
-     */
-    DO_NOTHING,
-    /**
-     * Slowly move forward
-     */
-    DRIVE_FORWARD;
+public class AutonomousMode {
+    enum StartingPosition { LEFT, CENTER, RIGHT }
+    enum SwitchPosition {LEFT , RIGHT}
 
-    // If you're on autonomous, you don't (shouldn't) need to worry about anything below
+    private StartingPosition startingPosition;
+    private SwitchPosition switchPosition;
+
+    public AutonomousMode(StartingPosition startingPosition , SwitchPosition switchPosition) {
+        this.startingPosition = startingPosition;
+        this.switchPosition = switchPosition;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof AutonomousMode &&
+                this.startingPosition.equals(((AutonomousMode) obj).startingPosition) &&
+                this.switchPosition.equals(((AutonomousMode) obj).switchPosition);
+    }
 
     /**
      * The entry in the backing NetworkTable which holds the driver's selected mode
