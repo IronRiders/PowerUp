@@ -15,14 +15,14 @@ public class Robot extends IterativeRobot
     }
 
     @Override
-    public void autonomousInit() 
-    {
-        auto.init(driveTrain);
+    public void autonomousInit(){
+
     }
 
     @Override
     public void autonomousPeriodic()
     {
+        auto.periodic(driveTrain, positioningSystem);
     }
 
     @Override

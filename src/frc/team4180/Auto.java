@@ -12,10 +12,10 @@ public class Auto {
                 driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0.3,0));
                 break;
             case TURN_LEFT:
-                //driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0,0));
+                driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(-0.3,0,0));
                 break;
             case TURN_RIGHT:
-                //driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0,0));
+                driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0.3,0,0));
                 break;
             case STOP:
                 driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0,0));
@@ -59,34 +59,115 @@ public class Auto {
         }
     }
     public void leftLeft(DriveTrain driveTrain, PositioningSystem positioningSystem){
+        if(positioningSystem.getPosY() < 3.05){
+            autonomousMode.state = FORWORD;
 
+        }
+
+       /* else if() { // some condition for turning
+            autonomousMode.state = TURN_RIGHT;
+
+         }
+*/
+        else if(positioningSystem.getPosX() < 0.613){
+            autonomousMode.state = FORWORD;
+
+        }
+        else if(positioningSystem.getPosY() > 3.05 && positioningSystem.getPosY() < 4.27){
+            autonomousMode.state = FORWORD;
+        }
+
+        move(driveTrain);
     }
 
     public void leftRight(DriveTrain driveTrain, PositioningSystem positioningSystem){
-        if(positioningSystem.getPosY < 3.2){
-            autonomousMode.state = FORWORD
-            move(driveTrain)
+        if(positioningSystem.getPosY() < 3.05){
+            autonomousMode.state = FORWORD;
         }
-        else if(){
+        /*else if(){    // some condition for turning
+            autonomousMode.state = TURN_RIGHT;
 
         }
-
-
+        */
+        else if(positionSystem.getPosX() < 5.633){
+            autonomousMode.state = FORWORD;
+        }
+        else if(positioningSystem.getPosY() > 3.05 && positioningSystem.getPosY() < 4.27){
+            autonomousMode.state = FORWORD;
+        }
+        move(driveTrain());
     }
 
     public void rightRight(DriveTrain driveTrain, PositioningSystem positioningSystem){
+        if(positioningSystem.getPosY() < 3.05){
+            autonomousMode.state = FORWORD;
+        }
+      /*  else if(){   // some condition for turning
+            autonomousMode.state = TURN_LEFT;
+
+        }
+*/
+        else if(positioningSystem.getPosX() < 0.613){
+            autonomousMode.state = FORWORD;
+
+        }
+        else if(positioningSystem.getPosY() > 3.05 && positioningSystem.getPosY() < 4.27){
+            autonomousMode.state = FORWORD;
+        }
+        move(driveTrain());
 
     }
 
     public void rightLeft(DriveTrain driveTrain, PositioningSystem positioningSystem){
+        if(positioningSystem.getPosY() < 3.05){
+            autonomousMode.state = FORWORD;
+        }
 
+        else if(positionSystem.getPosX() < 5.633){
+            autonomousMode.state = FORWORD;
+        }
+
+        /*else if(){   // some condition for turning
+            autonomousMode.state = TURN_LEFT;
+        }
+*/
+        else if(positioningSystem.getPosY() > 3.05 && positioningSystem.getPosY() < 4.27){
+            autonomousMode.state = FORWORD;
+        }
+        moveDriveTrain();
     }
 
     public void centerRight(DriveTrain driveTrain, PositioningSystem positioningSystem){
-
+        if(positioningSystem.getPosY() < 2.8){
+            autonomousMode.state = FORWORD;
+        }
+        /*else if(){  // some condition for turning
+            autonomousMode.state = TURN_RIGHT;
+        }
+        */
+        else if (positioningSystem.getPosX() < 2){
+            autonomousMode.state = FORWORD;
+        }
+        else if(positioningSystem.getPosY() > 2.8 && positioningSystem.getPosY() < 4.27){
+            autonomousMode.state = FORWORD;
+        }
+        move(driveTrain);
     }
 
     public void centerLeft(DriveTrain driveTrain){
-
+        if(positioningSystem.getPosY() < 2.8 ){
+            autonomousMode.state = FORWORD;
+        }
+        /*else if(){ // some condition for turning
+            autonomousMode.state = TURN_LEFT;
+        }
+        */
+        else if(positionSystem.getPosX() < 2 ){
+            autonomousMode.state = FORWORD;
+        }
+        else if(positioningSystem.getPosY() > 2.8 && positioningSystem.getPosY() < 4.27){
+            autonomousMode.state = FORWORD;
+        }
+        move(driveTrain);
     }
 }
