@@ -55,6 +55,13 @@ public class PositioningSystem {
         velocityY += currAccelerationY * dt;
         posY += velocityY * dt;
     }
+    public double getPosX(){
+        return posX;
+    }
+
+    public double getPosY(){
+        return posY;
+    }
 
     public void logPosition() {
         System.out.printf("Position: (%.4f, %.4f)\n", posX, posY);

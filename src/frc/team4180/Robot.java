@@ -26,8 +26,7 @@ public class Robot extends IterativeRobot
     }
 
     @Override
-    public void teleopPeriodic() 
-    {
+    public void teleopPeriodic(){
     }
 
     @Override

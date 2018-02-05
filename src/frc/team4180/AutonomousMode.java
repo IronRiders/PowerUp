@@ -9,14 +9,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutonomousMode {
     enum StartingPosition { LEFT, CENTER, RIGHT }
     enum SwitchPosition { LEFT, RIGHT }
+    enum State{ FORWORD , TURN_LEFT, TURN_RIGHT , STOP  }
+
 
     private static SwitchPosition matchDataPosition;
     public final StartingPosition startingPosition;
     public final SwitchPosition switchPosition;
+    public State state;
 
     private AutonomousMode(SwitchPosition switchPosition, StartingPosition startingPosition) {
         this.switchPosition = switchPosition;
         this.startingPosition = startingPosition;
+        this.state = State.STOP;
     }
 
     @Override
