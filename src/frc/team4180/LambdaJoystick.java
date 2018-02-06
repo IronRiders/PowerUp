@@ -122,3 +122,4 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
         }
     }
 }
+
