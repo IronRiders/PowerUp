@@ -2,68 +2,85 @@ package frc.team4180;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PositioningSystem {
-    ADIS16448_IMU bigBoard;
-    BuiltInAccelerometer roboRio;
-    private double velocityX = 0, velocityY = 0;
-    private double posX = 0, posY = 0;
-    double accelThresholdX, accelThresholdY;
+    private ADIS16448_IMU bigBoard;
+    private BuiltInAccelerometer roboRio;
+    private Timer time;
+    private double lastTime = 0;
+
+    private Vector accleration;
+    private Vector rotation;
+    private Vector velocity;
+    private Vector position;
+
+    private final double ERROR_THRESHOLD = 0.05;
 
     public PositioningSystem(){
+        accleration = new Vector();
+        velocity = new Vector();
+        position = new Vector();
+
         bigBoard = new ADIS16448_IMU();
         roboRio = new BuiltInAccelerometer();
         bigBoard.calibrate();
-        initThresholds();
+        time = new Timer();
+        time.start();
     }
 
-    private void initThresholds() {
-        final double dt = 1000; //milliseconds
-        double t0 = System.currentTimeMillis();
-        double sumX = 0, sumY = 0;
-        int iterations = 0;
-        while(System.currentTimeMillis() - t0 < dt) {
-            sumX += bigBoard.getAccelX();
-            sumY += bigBoard.getAccelY();
-            iterations++;
+    public void increment(){
+        double currentTime = time.get();
+        double dTime = currentTime - lastTime;
+        lastTime = currentTime;
+        if(dTime>0.5) return;
+        Vector accel = new Vector(bigBoard.getAccelX(), bigBoard.getAccelY(), bigBoard.getAccelZ());
+        Vector avgAcceleration = Vector.getAverage(accel, accleration);
+        accleration = accel;
+        avgAcceleration.multiply(dTime);
+        Vector oldVelocity = velocity.copy();
+        if(Math.abs(avgAcceleration.x) > ERROR_THRESHOLD || Math.abs(avgAcceleration.y) > ERROR_THRESHOLD) {
+            velocity.add(avgAcceleration);
         }
-        accelThresholdX = sumX / iterations;
-        accelThresholdY = sumY / iterations;
+        Vector avgVelocity = Vector.getAverage(oldVelocity, velocity);
+        avgVelocity.multiply(dTime);
+        position.add(avgVelocity);
+        SmartDashboard.putString("DB/String 0", Double.toString(position.x));
+        SmartDashboard.putString("DB/String 1", Double.toString(position.y));
+        SmartDashboard.putString("DB/String 2", Double.toString(position.z));
     }
 
-    public void test() {
-        System.out.println(bigBoard.getAccelX());
-        System.out.println(bigBoard.getAccelY());
-    }
+    static class Vector{
+        double x, y, z;
+        Vector(double x, double y, double z){
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
 
-    public double getAccelX() {
-        final double accelX = bigBoard.getAccelX();
-        return (accelX - accelThresholdX) / 9.8;
-    }
+        Vector(){
+            this(0, 0, 0);
+        }
 
-    public double getAccelY() {
-        final double accelY = bigBoard.getAccelY();
-        return (accelY - accelThresholdY) / 9.8;
-    }
+        void add(Vector v){
+            x += v.x;
+            y += v.y;
+            z += v.z;
+        }
 
-    public void riemann() {
-        final double dt = 0.02;
-        final double currAccelerationX = getAccelX();
-        velocityX += currAccelerationX * dt;
-        posX += velocityX * dt;
-        final double currAccelerationY = getAccelY();
-        velocityY += currAccelerationY * dt;
-        posY += velocityY * dt;
-    }
-    public double getPosX(){
-        return posX;
-    }
+        void multiply(double d){
+            x *= d;
+            y *= d;
+            z *= d;
+        }
 
-    public double getPosY(){
-        return posY;
-    }
+        Vector copy(){
+            return new Vector(x,y,z);
+        }
 
-    public void logPosition() {
-        System.out.printf("Position: (%.4f, %.4f)\n", posX, posY);
+        static Vector getAverage(Vector v1, Vector v2){
+            return new Vector((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
+        }
     }
 }
