@@ -36,4 +36,8 @@ public class DriveTrain {
         //System.out.println(distance/pulsesPerRevolution);
         return distance;
     }
+
+    public void reset(){
+
+    }
 }

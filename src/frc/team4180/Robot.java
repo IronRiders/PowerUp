@@ -1,5 +1,6 @@
 package frc.team4180;
 
+import com.analog.adis16448.frc.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import static frc.team4180.AutonomousMode.*;
@@ -14,7 +15,10 @@ public class Robot extends IterativeRobot
 {
     private final int LEFT_DRIVING = 0; //Placeholder
     private final int RIGHT_DRIVING = 1; //Placeholder
-    private DriveTrain driveTrain;
+
+    public DriveTrain driveTrain;
+    public ADIS16448_IMU gyro;
+
     private PositioningSystem positioningSystem;
     @Override
     public void robotInit()
