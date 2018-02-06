@@ -3,7 +3,9 @@ package frc.team4180;
 import static frc.team4180.AutonomousMode.State.FORWORD;
 
 public class Auto {
+
     AutonomousMode autonomousMode;
+
     public Auto(){
         autonomousMode = AutonomousMode.getAutonomousMode();
     }
@@ -60,6 +62,7 @@ public class Auto {
             break;
         }
     }
+
     public void leftLeft(DriveTrain driveTrain, PositioningSystem positioningSystem){
         if(positioningSystem.getPosY() < 3.05){
             autonomousMode.state = FORWORD;

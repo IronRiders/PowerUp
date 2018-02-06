@@ -19,4 +19,11 @@ public class DriveTrain {
         leftMotor.set(right);
         rightMotor.set(left);
     }
+
+    public void resetDistance() {
+    }
+
+    public double getDistance() {
+       return 0;
+    }
 }
