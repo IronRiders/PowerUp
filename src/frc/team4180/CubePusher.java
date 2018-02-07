@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class CubePusher {
 
-    Solenoid upperPiston;
+    private final Solenoid upperPiston;
 
-    public CubePusher(int port){
+    public CubePusher(final int port) {
         upperPiston = new Solenoid(port);
     }
 
