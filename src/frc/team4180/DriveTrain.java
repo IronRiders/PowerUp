@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveTrain {
-
-
     private SpeedController leftMotor, rightMotor;
     private Encoder encoder;
     final int wheelDiameter = 8;
