@@ -15,18 +15,23 @@ public class Robot extends IterativeRobot
 {
     private final int LEFT_DRIVING = 0; //Placeholder
     private final int RIGHT_DRIVING = 1; //Placeholder
-
+    private LambdaJoystick joystick1;
+    private LambdaJoystick joystick2;
     public DriveTrain driveTrain;
+    public CubeSucker cubeSucker;
     public ADIS16448_IMU gyro;
 
     private PositioningSystem positioningSystem;
     @Override
     public void robotInit()
     {
-
-       driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
-       positioningSystem = new PositioningSystem();
-
+        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
+        cubeSucker = new CubeSucker(LEFT_DRIVING, RIGHT_DRIVING);
+        positioningSystem = new PositioningSystem();
+        joystick1 = new LambdaJoystick(0);
+        joystick2 = new LambdaJoystick(1);
+        joystick1.addButton(3, ()->{cubeSucker.Blow();}, ()->{cubeSucker.Neutral();});
+        joystick1.addButton(1, ()->{cubeSucker.Suck();}, ()->{cubeSucker.Neutral();});
         CameraServer.getInstance().startAutomaticCapture();
     }
 
