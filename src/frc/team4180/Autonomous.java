@@ -2,8 +2,9 @@ package frc.team4180;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import frc.team4180.LambdaJoystick.ThrottlePosition;
 
-public class AutonomousAlexs {
+public class Autonomous {
     ArrayList<Callable<Boolean>> actions;
     int actionIndex;
 
@@ -13,7 +14,7 @@ public class AutonomousAlexs {
 
     private final double speed = 0.3;
 
-    public AutonomousAlexs(Robot robot){
+    public Autonomous(Robot robot){
         this.robot = robot;
 
         yaw = robot.gyro.getYaw();
@@ -30,7 +31,7 @@ public class AutonomousAlexs {
 
     public boolean drive(double distance){
         if(robot.driveTrain.getDistance() < distance) {
-            robot.driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0, speed));
+            robot.driveTrain.updateSpeed(new ThrottlePosition(0, speed));
             return false;
         }
         return true;
@@ -38,14 +39,14 @@ public class AutonomousAlexs {
 
     public boolean turn(double degrees){
         if(Math.abs(robot.gyro.getYaw() - yaw - degrees) < 7){
-            robot.driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(speed, 0));
+            robot.driveTrain.updateSpeed(new ThrottlePosition(speed, 0));
             return false;
         }
         return true;
     }
 
     public boolean depositBlock(){
-        //robot push with piston
+        robot.cubePusher.extend();
         return true;
     }
 
