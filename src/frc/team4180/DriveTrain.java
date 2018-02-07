@@ -18,7 +18,7 @@ public class DriveTrain {
         rightMotor = new VictorSP(rightPort);
         encoder = new Encoder(1,0);
         //encoder.reset();
-        encoder.setDistancePerPulse(Math.PI * wheelDiameter);
+        encoder.setDistancePerPulse((Math.PI * wheelDiameter) / pulsesPerRevolution);
     }
 
     public void updateSpeed(LambdaJoystick.ThrottlePosition throttlePosition) {
@@ -33,7 +33,11 @@ public class DriveTrain {
         System.out.print(encoderTest);
         // 8 inches
         double distance = encoder.getDistance();
-        //System.out.println(distance/pulsesPerRevolution);
+        //System.out.println(distance);
         return distance;
+    }
+
+    public void reset(){
+
     }
 }
