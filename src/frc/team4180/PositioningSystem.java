@@ -11,18 +11,21 @@ public class PositioningSystem {
     private final Timer time;
     private double lastTime = 0;
 
-    private Vector accleration;
-    private Vector velocity;
-    private Vector position;
+    private Vector acceleration; // in m/s/s
+    private Vector velocity;     // in m/s
+    private Vector position;     // in m
 
     private static final double ERROR_THRESHOLD = 0.05;
+    private static final double GS_TO_METERS_PER_SECOND_PER_SECOND = 9.80665;
 
-    public PositioningSystem() {
-        accleration = new Vector();
+    public PositioningSystem(final ADIS16448_IMU bigBoard, final BuiltInAccelerometer roboRio) {
+        acceleration = new Vector();
         velocity = new Vector();
         position = new Vector();
-        bigBoard = new ADIS16448_IMU();
-        roboRio = new BuiltInAccelerometer();
+
+        this.bigBoard = bigBoard;
+        this.roboRio = roboRio;
+
         bigBoard.calibrate();
         time = new Timer();
         time.start();
@@ -35,9 +38,10 @@ public class PositioningSystem {
         if(dTime > 0.5) {
             return;
         }
-        final Vector currentAccel = new Vector(bigBoard.getAccelX(), bigBoard.getAccelY(), bigBoard.getAccelZ());
-        final Vector oldAccel = accleration;
-        accleration = currentAccel;
+        final Vector currentAccel = new Vector(bigBoard.getAccelX(), bigBoard.getAccelY(), bigBoard.getAccelZ())
+                                        .scalarTimes(GS_TO_METERS_PER_SECOND_PER_SECOND);
+        final Vector oldAccel = acceleration;
+        acceleration = currentAccel;
         final Vector dVelocity = Vector.average(currentAccel, oldAccel).scalarTimes(dTime);
         final Vector oldVelocity = velocity;
         if(Math.abs(dVelocity.x) > ERROR_THRESHOLD || Math.abs(dVelocity.y) > ERROR_THRESHOLD) {
