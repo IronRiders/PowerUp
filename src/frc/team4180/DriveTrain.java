@@ -28,7 +28,7 @@ public class DriveTrain {
     }
 
     public double getDistance() {
-        final int encoderTest = encoder.get();
+        // final int encoderTest = encoder.get();
         // System.out.println(encoderTest);
         final double distance = encoder.getDistance();
         // System.out.println(distance);

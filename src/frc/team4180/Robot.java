@@ -30,9 +30,12 @@ public class Robot extends IterativeRobot {
     }
 
     @Override
-    public void autonomousInit() 
-    {
-        autoRoutine = new Autonomous(this);
+    public void autonomousInit() {
+        // This is an example/not good routine. 10 is not an actual value
+        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
+            System.out.println("Debug");
+            return true;
+        });
     }
 
     @Override
