@@ -17,8 +17,10 @@ public class Robot extends IterativeRobot
     private final int RIGHT_DRIVING = 1; //Placeholder
     private LambdaJoystick joystick1;
     private LambdaJoystick joystick2;
+    private LambdaJoystick joystick3;
     public DriveTrain driveTrain;
     public CubeSucker cubeSucker;
+    public cubePusher cubePusher;
     public ADIS16448_IMU gyro;
 
     private PositioningSystem positioningSystem;
@@ -27,11 +29,14 @@ public class Robot extends IterativeRobot
     {
         driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
         cubeSucker = new CubeSucker(LEFT_DRIVING, RIGHT_DRIVING);
+        cubePusher = new cubePusher(4);
         positioningSystem = new PositioningSystem();
         joystick1 = new LambdaJoystick(0);
         joystick2 = new LambdaJoystick(1);
+        joystick3 = new LambdaJoystick(2);
         joystick1.addButton(3, ()->{cubeSucker.Blow();}, ()->{cubeSucker.Neutral();});
         joystick1.addButton(1, ()->{cubeSucker.Suck();}, ()->{cubeSucker.Neutral();});
+        joystick3.addButton(2, ()->{cubePusher.extend();}, ()->{cubePusher.reset();});
         CameraServer.getInstance().startAutomaticCapture();
     }
 
