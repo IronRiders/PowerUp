@@ -3,16 +3,9 @@ package frc.team4180;
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static frc.team4180.Ports.*;
 
-public class Robot extends IterativeRobot 
-{
-    private final int LEFT_DRIVING = 0; //Placeholder
-    private final int RIGHT_DRIVING = 1; //Placeholder
-    private final int LEFT_FLY_WHEEL = 2;
-    private final int RIGHT_FLY_WHEEL = 3;
-
-    private final int PISTON = 0;
+public class Robot extends IterativeRobot {
 
     private LambdaJoystick joystick1;
     private LambdaJoystick joystick2;
@@ -23,7 +16,7 @@ public class Robot extends IterativeRobot
     public ADIS16448_IMU gyro;
     private PositioningSystem positioningSystem;
 
-    Autonomous autoRoutine;
+    public Autonomous autoRoutine;
 
     @Override
     public void robotInit()
@@ -36,8 +29,8 @@ public class Robot extends IterativeRobot
         joystick1 = new LambdaJoystick(0);
         joystick2 = new LambdaJoystick(1);
 
-        joystick1.addButton(3, cubeSucker::Blow, cubeSucker::Neutral);
-        joystick1.addButton(1, cubeSucker::Suck, cubeSucker::Neutral);
+        joystick1.addButton(3, cubeSucker::blow, cubeSucker::neutral);
+        joystick1.addButton(1, cubeSucker::suck, cubeSucker::neutral);
         joystick2.addButton(2, cubePusher::extend, cubePusher::reset);
 
         CameraServer.getInstance().startAutomaticCapture();
@@ -52,11 +45,7 @@ public class Robot extends IterativeRobot
     @Override
     public void autonomousPeriodic()
     {
-        try {
-            autoRoutine.run();
-        } catch (Exception e) {
-            SmartDashboard.putString("DB/String 1", e.getMessage());
-        }
+        autoRoutine.run();
     }
 
     @Override
