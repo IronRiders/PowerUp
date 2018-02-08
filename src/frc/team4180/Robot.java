@@ -25,8 +25,6 @@ public class Robot extends IterativeRobot {
         joystick1.addButton(3, cubeSucker::blow, cubeSucker::neutral);
         joystick1.addButton(1, cubeSucker::suck, cubeSucker::neutral);
         joystick2.addButton(2, cubePusher::extend, cubePusher::reset);
-
-        CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override
