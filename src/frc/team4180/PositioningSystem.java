@@ -17,12 +17,12 @@ public class PositioningSystem {
 
     private static final double ERROR_THRESHOLD = 0.05;
 
-    public PositioningSystem() {
+    public PositioningSystem(ADIS16448_IMU bigBoard, BuiltInAccelerometer roboRio) {
         accleration = new Vector();
         velocity = new Vector();
         position = new Vector();
-        bigBoard = new ADIS16448_IMU();
-        roboRio = new BuiltInAccelerometer();
+        this.bigBoard = bigBoard;
+        this.roboRio = roboRio;
         bigBoard.calibrate();
         time = new Timer();
         time.start();
