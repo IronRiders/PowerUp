@@ -1,8 +1,9 @@
 package frc.team4180;
 
 import java.util.function.Consumer;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
+public class LambdaJoystick extends Joystick {
     private Button[] buttons = new Button[11];
     private Consumer<ThrottlePosition> joystickListener;
 
@@ -11,7 +12,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
      * @param port USB port on the computer that the joystick is plugged in.
      * @param joystickListener Consumer of the Joystick's throttle position (x, y, and z).
      */
-    public LambdaJoystick(int port, Consumer<ThrottlePosition> joystickListener) {
+    public LambdaJoystick(final int port, final Consumer<ThrottlePosition> joystickListener) {
         super(port);
         this.joystickListener = joystickListener;
     }
@@ -20,8 +21,8 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
      * Create a new Joystick Listener given the USB port.
      * @param port USB port on the computer that the joystick is plugged in.
      */
-    public LambdaJoystick(int port){
-        this(port, (ThrottlePosition position) -> {});
+    public LambdaJoystick(final int port) {
+        this(port, position -> {});
     }
 
     /**
@@ -30,7 +31,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
      * @param onPress Action to be executed when the button is pressed.
      * @param onRelease Action to be executed when the button is released.
      */
-    public void addButton(int buttonNum, Runnable onPress, Runnable onRelease) {
+    public void addButton(final int buttonNum, final Runnable onPress, final Runnable onRelease) {
         buttons[buttonNum - 1] = new Button(onPress, onRelease);
     }
 
@@ -39,7 +40,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
      * @param buttonNum The number of the button written on the joystick (1 - 10).
      * @param onPress Action to be executed when the button is pressed.
      */
-    public void addButton(int buttonNum, Runnable onPress) {
+    public void addButton(final int buttonNum, final Runnable onPress) {
         addButton(buttonNum, onPress, () -> {});
     }
 
@@ -56,11 +57,11 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
     }
 
     /**
-     * Accounts for joy-stick error by rounding small numbers to 0.
+     * Accounts for joystick error by rounding small numbers to 0.
      * @param d A joystick value from -1 to 1.
      * @return If d is within 0.03 of 0, d is rounded down to 0.
      */
-    private static double buffer(double d) {
+    private static double buffer(final double d) {
         return (Math.abs(d) > 0.03) ? d : 0;
     }
 
@@ -69,15 +70,15 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
      */
     private class Button {
         public boolean currentState = false;
-        public Runnable onPress;
-        public Runnable onRelease;
+        public final Runnable onPress;
+        public final Runnable onRelease;
 
         /**
          * Create a new Button listener given a Runnable for when the button is pressed or released.
          * @param onPress Runnable for when the button is pressed down.
          * @param onRelease Runnable for when the button is released.
          */
-        public Button(Runnable onPress, Runnable onRelease) {
+        public Button(final Runnable onPress, final Runnable onRelease) {
             this.onPress = onPress;
             this.onRelease = onRelease;
         }
@@ -86,10 +87,14 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
          * Given the value of the button, the listener calls the appropriate runnable if it has changed.
          * @param newState The current state of the button.
          */
-        public void listen(boolean newState) {
+        public void listen(final boolean newState) {
             if (currentState != newState) {
                 currentState = newState;
-                (newState ? onPress : onRelease).run();
+                if(newState) {
+                    onPress.run();
+                } else {
+                    onRelease.run();
+                }
             }
         }
     }
@@ -98,7 +103,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
      * Throttle Position holds doubles x, y, and z representing the location of the throttle and dial.
      */
     public static class ThrottlePosition {
-        public double x, y, z;
+        public final double x, y, z;
 
         /**
          * Create a Throttle position given a (x, y) position of the throttle and the position of the dial (z).
@@ -106,7 +111,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
          * @param y The vertical position of the joystick, 1 forwards, -1 is backwards (1 to -1).
          * @param z Position of the dial on the joystick (1 to -1).
          */
-        public ThrottlePosition(double x, double y, double z) {
+        public ThrottlePosition(final double x, final double y, final double z) {
             this.x = x;
             this.y = y;
             this.z = z;
@@ -117,7 +122,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
          * @param x The right left position of the joystick (1 to -1).
          * @param y The vertical position of the joystick, 1 forwards, -1 is backwards (1 to -1).
          */
-        public ThrottlePosition(double x, double y) {
+        public ThrottlePosition(final double x, final double y) {
             this(x, y, 0);
         }
     }

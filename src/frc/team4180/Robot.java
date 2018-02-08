@@ -1,82 +1,59 @@
 package frc.team4180;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import static frc.team4180.AutonomousMode.*;
+import static frc.team4180.Ports.*;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class Robot extends IterativeRobot {
 
-import java.io.IOException;
-
-public class Robot extends IterativeRobot 
-{
-    private final int LEFT_DRIVING1 = 0; //Placeholder
-    private final int LEFT_DRIVING2 = 1; //Placeholder
-    private final int RIGHT_DRIVING1 = 2; //Placeholder
-    private final int RIGHT_DRIVING2 = 3; //Placeholder
     private LambdaJoystick joystick1;
     private LambdaJoystick joystick2;
-    private LambdaJoystick joystick3;
+
+    public ADIS16448_IMU gyro;
+    public BuiltInAccelerometer accelerometer;
+
     public DriveTrain driveTrain;
     public CubeSucker cubeSucker;
-    public cubePusher cubePusher;
-    public ADIS16448_IMU gyro;
-
+    public CubePusher cubePusher;
     private PositioningSystem positioningSystem;
+
+    public Autonomous autoRoutine;
+
     @Override
     public void robotInit()
     {
-        driveTrain = new DriveTrain(LEFT_DRIVING1, LEFT_DRIVING2, RIGHT_DRIVING1, RIGHT_DRIVING2);
-        cubeSucker = new CubeSucker(LEFT_DRIVING, RIGHT_DRIVING); // why does CubeSucker user LEFT and RIGHT DRIVING? Aren't those the wheels
-        cubePusher = new cubePusher(4);
-        positioningSystem = new PositioningSystem();
+        CameraServer.getInstance().startAutomaticCapture();
+        gyro = new ADIS16448_IMU();
+        accelerometer = new BuiltInAccelerometer();
+
+        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
+        cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
+        cubePusher = new CubePusher(PISTON);
+        positioningSystem = new PositioningSystem(gyro, accelerometer);
+
         joystick1 = new LambdaJoystick(0);
         joystick2 = new LambdaJoystick(1);
-        joystick3 = new LambdaJoystick(2);
-        joystick1.addButton(3, ()->{cubeSucker.Blow();}, ()->{cubeSucker.Neutral();});
-        joystick1.addButton(1, ()->{cubeSucker.Suck();}, ()->{cubeSucker.Neutral();});
-        joystick3.addButton(2, ()->{cubePusher.extend();}, ()->{cubePusher.reset();});
-        CameraServer.getInstance().startAutomaticCapture();
+        joystick1.addButton(3, cubeSucker::blow, cubeSucker::neutral);
+        joystick1.addButton(1, cubeSucker::suck, cubeSucker::neutral);
+        joystick2.addButton(2, cubePusher::extend, cubePusher::reset);
     }
 
     @Override
     public void autonomousInit() 
     {
-        AutonomousMode.initializeNetworkTables(DO_NOTHING);
+        autoRoutine = new Autonomous(this);
     }
 
     @Override
     public void autonomousPeriodic()
     {
-        switch (AutonomousMode.getCurrentMode()) {
-            case DO_NOTHING: break;
-            case DRIVE_FORWARD:
-                driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0.1, 0.1));
-                break;
-        }
+        autoRoutine.run();
     }
 
     @Override
     public void teleopPeriodic() {
-
-        // test for networktable
-//        double x = 0.33;
-//        while (x<50) {
-//            Timer.delay(1);
-//            x += 1;
-//            try {
-//                SmartDashboard.putNumber("/SmartDashboard/X", x);
-//
-//            } catch (NullPointerException e) {
-//                System.out.print(e);
-//            }
-//        }
-
-
-
         positioningSystem.increment();
     }
 

@@ -9,18 +9,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutonomousMode {
     enum StartingPosition { LEFT, CENTER, RIGHT }
     enum SwitchPosition { LEFT, RIGHT }
-    enum State{ FORWORD , TURN_LEFT, TURN_RIGHT , STOP  }
-
 
     private static SwitchPosition matchDataPosition;
     public final StartingPosition startingPosition;
     public final SwitchPosition switchPosition;
-    public State state;
 
     private AutonomousMode(SwitchPosition switchPosition, StartingPosition startingPosition) {
         this.switchPosition = switchPosition;
         this.startingPosition = startingPosition;
-        this.state = State.STOP;
     }
 
     @Override
@@ -34,7 +30,7 @@ public class AutonomousMode {
      * @return the current autonomous mode, fetching the starting position from the dashboard
      */
     public static AutonomousMode getAutonomousMode() {
-        final String startingPositionString = SmartDashboard.getString("/SmartDashboard/autonomous/selected_starting_position", null);
+        final String startingPositionString = SmartDashboard.getString("autonomous/selected_starting_position", null);
         if(startingPositionString == null) {
             throw new IllegalStateException("Invalid starting position from dashboard.");
         }
@@ -63,6 +59,6 @@ public class AutonomousMode {
         for(int i = 0; i < startingPositions.length; i++) {
             startingPositionNames[i] = startingPositions[i].name();
         }
-        SmartDashboard.putStringArray("/SmartDashboard/autonomous/starting_positions", startingPositionNames);
+        SmartDashboard.putStringArray("autonomous/starting_positions", startingPositionNames);
     }
 }
