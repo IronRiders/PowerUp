@@ -13,8 +13,10 @@ import java.io.IOException;
 
 public class Robot extends IterativeRobot 
 {
-    private final int LEFT_DRIVING = 0; //Placeholder
-    private final int RIGHT_DRIVING = 1; //Placeholder
+    private final int LEFT_DRIVING1 = 0; //Placeholder
+    private final int LEFT_DRIVING2 = 1; //Placeholder
+    private final int RIGHT_DRIVING1 = 2; //Placeholder
+    private final int RIGHT_DRIVING2 = 3; //Placeholder
     private LambdaJoystick joystick1;
     private LambdaJoystick joystick2;
     private LambdaJoystick joystick3;
@@ -27,8 +29,8 @@ public class Robot extends IterativeRobot
     @Override
     public void robotInit()
     {
-        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
-        cubeSucker = new CubeSucker(LEFT_DRIVING, RIGHT_DRIVING);
+        driveTrain = new DriveTrain(LEFT_DRIVING1, LEFT_DRIVING2, RIGHT_DRIVING1, RIGHT_DRIVING2);
+        cubeSucker = new CubeSucker(LEFT_DRIVING, RIGHT_DRIVING); // why does CubeSucker user LEFT and RIGHT DRIVING? Aren't those the wheels
         cubePusher = new cubePusher(4);
         positioningSystem = new PositioningSystem();
         joystick1 = new LambdaJoystick(0);
