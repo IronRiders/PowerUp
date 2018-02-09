@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
         gyro = new ADIS16448_IMU();
         accelerometer = new BuiltInAccelerometer();
 
-        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
+        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING); // what does LEFT_DRIVING and RIGHT_DRIVING do?
         cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
         cubePusher = new CubePusher(PISTON);
         positioningSystem = new PositioningSystem(gyro, accelerometer);
