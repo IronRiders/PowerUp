@@ -5,10 +5,10 @@ import java.util.function.BooleanSupplier;
 import frc.team4180.LambdaJoystick.ThrottlePosition;
 
 public class Autonomous {
-    private final Stack<BooleanSupplier> actions;
-    private Robot robot;
-    private double yaw;
-    private final double speed = 0.3;
+    private final Stack<BooleanSupplier> actions; // true to halt, false to continue
+    private final Robot robot;
+    private double yaw; // Degrees
+    private final double speed = 0.3; // Motor power
 
     public Autonomous(final Robot robot, final BooleanSupplier... actions) {
         this.robot = robot;
