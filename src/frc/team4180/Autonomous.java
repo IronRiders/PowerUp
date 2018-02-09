@@ -10,7 +10,7 @@ public class Autonomous {
     private double yaw;
     private final double speed = 0.3;
 
-    public Autonomous(final Robot robot, final BooleanSupplier... actions) {
+    Autonomous(final Robot robot, final BooleanSupplier... actions) {
         this.robot = robot;
         this.yaw = robot.gyro.getYaw();
         this.actions = new Stack<>();
