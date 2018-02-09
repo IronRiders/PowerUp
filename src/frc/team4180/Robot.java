@@ -21,7 +21,20 @@ public class Robot extends IterativeRobot {
     public Autonomous autoRoutine;
 
     @Override
-    public void robotInit() {
+    public void robotInit()
+    {
+        CameraServer.getInstance().startAutomaticCapture();
+        gyro = new ADIS16448_IMU();
+        accelerometer = new BuiltInAccelerometer();
+
+        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING); // what does LEFT_DRIVING and RIGHT_DRIVING do?
+        cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
+        cubePusher = new CubePusher(PISTON);
+        positioningSystem = new PositioningSystem(gyro, accelerometer);
+
+        joystick1 = new LambdaJoystick(0);
+        joystick2 = new LambdaJoystick(1);
+
         joystick1.addButton(3, cubeSucker::blow, cubeSucker::neutral);
         joystick1.addButton(1, cubeSucker::suck, cubeSucker::neutral);
         joystick2.addButton(2, cubePusher::extend, cubePusher::reset);
