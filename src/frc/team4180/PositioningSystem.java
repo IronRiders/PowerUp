@@ -13,6 +13,7 @@ public class PositioningSystem {
 
     private Vector acceleration; // in m/s/s
     private Vector velocity;     // in m/s
+    //a position isn't a vector, no direction needed
     private Vector position;     // in m
 
     private static final double ERROR_THRESHOLD = 0.05;

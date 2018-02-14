@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class  CubeSucker {
 
+    //what else needs to be be added to this class?
     private final SpeedController flyWheelLeft, flyWheelRight;
     private final double speed = 0.5;
 
@@ -16,14 +17,12 @@ public class  CubeSucker {
     public void suck() {
         spinWheels(speed);
     }
-
     public void blow() {
         spinWheels(-speed);
     }
     public void neutral() {
         spinWheels(0);
     }
-
     private void spinWheels(final double speed) {
         flyWheelLeft.set(speed);
         flyWheelRight.set(-speed);
