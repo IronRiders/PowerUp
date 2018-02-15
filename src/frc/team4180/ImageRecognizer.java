@@ -6,15 +6,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import static edu.wpi.first.wpilibj.networktables.NetworkTable.getTable;
 
 public class ImageRecognizer {
-    NetworkTable networkTable;
+    private final NetworkTable networkTable;
 
-
-    public ImageRecognizer(){
+    public ImageRecognizer() {
         networkTable = NetworkTableInstance.getDefault().getTable("GRIP/myContoursReport");
-
     }
-
-
-
-
 }

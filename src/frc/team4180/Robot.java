@@ -1,70 +1,51 @@
 package frc.team4180;
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import static frc.team4180.AutonomousMode.*;
+import static frc.team4180.Ports.*;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class Robot extends IterativeRobot {
 
-import java.io.IOException;
+    private final LambdaJoystick joystick1 = new LambdaJoystick(0);
+    private final LambdaJoystick joystick2 = new LambdaJoystick(1);
 
-public class Robot extends IterativeRobot 
-{
-    private final int LEFT_DRIVING = 0; //Placeholder
-    private final int RIGHT_DRIVING = 1; //Placeholder
+    public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
+    public final CubeSucker cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
+    public final CubePusher cubePusher = new CubePusher(PISTON);
+    public final ADIS16448_IMU gyro = new ADIS16448_IMU();
+    public final BuiltInAccelerometer roboRio = new BuiltInAccelerometer();
+    public final PositioningSystem positioningSystem = new PositioningSystem(gyro, roboRio);
 
-    public DriveTrain driveTrain;
-    public ADIS16448_IMU gyro;
+    public Autonomous autoRoutine;
 
-    private PositioningSystem positioningSystem;
     @Override
     public void robotInit()
     {
-
-       driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
-       positioningSystem = new PositioningSystem();
-
         CameraServer.getInstance().startAutomaticCapture();
+
+        joystick1.addButton(3, cubeSucker::blow, cubeSucker::neutral);
+        joystick1.addButton(1, cubeSucker::suck, cubeSucker::neutral);
+        joystick2.addButton(2, cubePusher::extend, cubePusher::reset);
     }
 
     @Override
-    public void autonomousInit() 
-    {
-        AutonomousMode.initializeNetworkTables(DO_NOTHING);
+    public void autonomousInit() {
+        // This is an example/not good routine. 10 is not an actual value
+        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
+            System.out.println("Debug");
+            return true;
+        });
     }
 
     @Override
-    public void autonomousPeriodic()
-    {
-        switch (AutonomousMode.getCurrentMode()) {
-            case DO_NOTHING: break;
-            case DRIVE_FORWARD:
-                driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0.1, 0.1));
-                break;
-        }
+    public void autonomousPeriodic() {
+        autoRoutine.run();
     }
 
     @Override
     public void teleopPeriodic() {
-
-        // test for networktable
-//        double x = 0.33;
-//        while (x<50) {
-//            Timer.delay(1);
-//            x += 1;
-//            try {
-//                SmartDashboard.putNumber("/SmartDashboard/X", x);
-//
-//            } catch (NullPointerException e) {
-//                System.out.print(e);
-//            }
-//        }
-
-
-
         positioningSystem.increment();
     }
 
@@ -72,8 +53,4 @@ public class Robot extends IterativeRobot
     public void testPeriodic() {
         driveTrain.getDistance();
     }
-
-    @Override
-    public void testInit() {}
-
 }
