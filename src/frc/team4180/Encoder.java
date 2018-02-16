@@ -10,5 +10,7 @@ public class Encoder {
      * double rate: the speed of the robot in M/S
      * boolean stopped: does the speed equal 0
      * boolean direction: forward of backward
+     *
+     * https://wpilib.screenstepslive.com/s/3120/m/7912/l/85770-measuring-rotation-of-a-wheel-or-other-shaft-using-encoders
      */
 }
