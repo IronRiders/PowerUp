@@ -17,6 +17,30 @@ public class Autonomous {
         for(final BooleanSupplier supplier : actions) {
             this.actions.push(supplier);
         }
+
+    }
+
+    Autonomous(AutonomousMode mode, Robot robot, boolean isRightSide){
+        int turnAngle = isRightSide ? 90:-90;
+
+        this.robot = robot;
+        if (mode.startingPosition.equals(mode.switchPosition)){
+            addAction(() -> drive(141)); // Distances in inches, need to be reavaluated w/ encoders thought about, and tested.
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> drive(36));
+        } else if (! mode.startingPosition.equals(mode.switchPosition)) {
+            addAction(() -> drive(216));
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> drive(252));
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> drive(72));
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> drive(37));
+        }
     }
 
     public void run() {
