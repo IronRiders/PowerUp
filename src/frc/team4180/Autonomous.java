@@ -6,7 +6,7 @@ import frc.team4180.LambdaJoystick.ThrottlePosition;
 
 public class Autonomous {
 
-    private final Stack<BooleanSupplier> actions; // true to halt, false to continue
+    private Stack<BooleanSupplier> actions; // true to halt, false to continue
     private final Robot robot;
     private double yaw; // Degrees
     private final double speed = 0.3; // Motor power
