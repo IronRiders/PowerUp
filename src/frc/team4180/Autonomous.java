@@ -25,21 +25,29 @@ public class Autonomous {
 
         this.robot = robot;
         if (mode.startingPosition.equals(mode.switchPosition)){
+            addAction(() -> startDrive());
             addAction(() -> drive(141)); // Distances in inches, need to be reavaluated w/ encoders thought about, and tested.
             addAction(() -> startTurn());
             addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
             addAction(() -> drive(36));
+            addAction(() -> depositBlock());
         } else if (! mode.startingPosition.equals(mode.switchPosition)) {
+            addAction(() -> startDrive());
             addAction(() -> drive(216));
             addAction(() -> startTurn());
             addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
             addAction(() -> drive(252));
             addAction(() -> startTurn());
             addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
             addAction(() -> drive(72));
             addAction(() -> startTurn());
             addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
             addAction(() -> drive(37));
+            addAction(() -> depositBlock());
         }
     }
 
