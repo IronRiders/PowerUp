@@ -5,7 +5,8 @@ import java.util.function.BooleanSupplier;
 import frc.team4180.LambdaJoystick.ThrottlePosition;
 
 public class Autonomous {
-    private final Stack<BooleanSupplier> actions; // true to halt, false to continue
+
+    private Stack<BooleanSupplier> actions; // true to halt, false to continue
     private final Robot robot;
     private double yaw; // Degrees
     private final double speed = 0.3; // Motor power
@@ -16,6 +17,38 @@ public class Autonomous {
         this.actions = new Stack<>();
         for(final BooleanSupplier supplier : actions) {
             this.actions.push(supplier);
+        }
+
+    }
+
+    Autonomous(AutonomousMode mode, Robot robot, boolean isRightSide){
+        int turnAngle = isRightSide ? 90:-90;
+
+        this.robot = robot;
+        if (mode.startingPosition.equals(mode.switchPosition)){
+            addAction(() -> startDrive());
+            addAction(() -> drive(141)); // Distances in inches, need to be reavaluated w/ encoders thought about, and tested.
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
+            addAction(() -> drive(36));
+            addAction(() -> depositBlock());
+        } else if (! mode.startingPosition.equals(mode.switchPosition)) {
+            addAction(() -> startDrive());
+            addAction(() -> drive(216));
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
+            addAction(() -> drive(252));
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
+            addAction(() -> drive(72));
+            addAction(() -> startTurn());
+            addAction(() -> turn(turnAngle));
+            addAction(() -> startDrive());
+            addAction(() -> drive(37));
+            addAction(() -> depositBlock());
         }
     }
 
