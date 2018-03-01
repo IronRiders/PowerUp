@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class CubePusher {
 
-    //what else needs to be added to this class?
     private final DoubleSolenoid upperPiston;
 
     public CubePusher(final int port1, final int port2) {

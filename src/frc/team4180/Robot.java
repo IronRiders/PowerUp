@@ -17,7 +17,7 @@ public class Robot extends IterativeRobot {
     public final PositioningSystem positioningSystem = new PositioningSystem(gyro, roboRio);
 
     private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
-    private final LambdaJoystick joystick2 = new LambdaJoystick(1);
+    private final LambdaJoystick joystick2 = new LambdaJoystick(1, cubeSucker::updateSpeed);
 
     public Autonomous autoRoutine;
 
@@ -33,7 +33,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        // This is an example/not good routine. 10 is not an actual value
         autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
             System.out.println("Debug");
             return true;
