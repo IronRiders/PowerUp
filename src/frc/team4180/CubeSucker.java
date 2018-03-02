@@ -7,7 +7,7 @@ public class  CubeSucker {
 
     //what else needs to be be added to this class?
     private final SpeedController flyWheelLeft, flyWheelRight;
-    private final double speed = 0.2;
+    private final double speed = 0.5;
 
     public CubeSucker(final int leftPort, final int rightPort) {
         flyWheelLeft = new Spark(leftPort);
@@ -26,5 +26,12 @@ public class  CubeSucker {
     private void spinWheels(final double speed) {
         flyWheelLeft.set(speed);
         flyWheelRight.set(-speed);
+    }
+
+    public void updateSpeed(final LambdaJoystick.ThrottlePosition throttlePosition){
+        final double left = throttlePosition.y - throttlePosition.x;
+        final double right = -throttlePosition.y -  throttlePosition.x;
+        flyWheelLeft.set(left);
+        flyWheelRight.set(right);
     }
 }

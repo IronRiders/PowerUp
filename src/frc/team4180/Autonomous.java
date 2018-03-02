@@ -5,7 +5,7 @@ import java.util.function.BooleanSupplier;
 import frc.team4180.LambdaJoystick.ThrottlePosition;
 
 public class Autonomous {
-    private final Stack<BooleanSupplier> actions; // true to halt, false to continue
+    private Stack<BooleanSupplier> actions; // true to halt, false to continue
     private final Robot robot;
     private double yaw; // Degrees
     private final double speed = 0.3; // Motor power
@@ -20,10 +20,12 @@ public class Autonomous {
 
     }
 
+    //THIS WILL NOT WORK YOU MUST CONVERT THE TYPES!
     Autonomous(AutonomousMode mode, Robot robot, boolean isRightSide){
-        int turnAngle = isRightSide ? 90:-90;
+        int turnAngle = isRightSide ? 90 : -90;
 
         this.robot = robot;
+        //THIS WILL NOT WORK YOU MUST CONVERT THE TYPES!
         if (mode.startingPosition.equals(mode.switchPosition)){
             addAction(() -> drive(141)); // Distances in inches, need to be reavaluated w/ encoders thought about, and tested.
             addAction(() -> startTurn());
@@ -56,7 +58,7 @@ public class Autonomous {
 
     public boolean drive(final double distance) {
         if(robot.driveTrain.getDistance() < distance) {
-            robot.driveTrain.updateSpeed(new ThrottlePosition(0, speed));
+            robot.driveTrain.updateSpeed(new ThrottlePosition(0, -speed));
             return false;
         }
         return true;
