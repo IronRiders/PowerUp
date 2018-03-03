@@ -65,5 +65,8 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
+# I added these I'm not sure if they are too broad -Alex
+*.class
+*.jar
 
 # End of https://www.gitignore.io/api/intellij
