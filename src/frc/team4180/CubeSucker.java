@@ -1,16 +1,16 @@
 package frc.team4180;
 
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.VictorSP;
 
-public class CubeSucker {
+public class  CubeSucker {
 
     private final SpeedController flyWheelLeft, flyWheelRight;
-    private final double speed = 0.5;
+    private final double speed = 0.2;
 
     public CubeSucker(final int leftPort, final int rightPort) {
-        flyWheelLeft = new VictorSP(leftPort);
-        flyWheelRight = new VictorSP(rightPort);
+        flyWheelLeft = new Spark(leftPort);
+        flyWheelRight = new Spark(rightPort);
     }
 
     public void suck() {
@@ -20,6 +20,7 @@ public class CubeSucker {
     public void blow() {
         spinWheels(-speed);
     }
+
     public void neutral() {
         spinWheels(0);
     }
@@ -27,5 +28,12 @@ public class CubeSucker {
     private void spinWheels(final double speed) {
         flyWheelLeft.set(speed);
         flyWheelRight.set(-speed);
+    }
+
+    public void updateSpeed(final LambdaJoystick.ThrottlePosition throttlePosition) {
+        final double left = throttlePosition.y - throttlePosition.x;
+        final double right = -throttlePosition.y - throttlePosition.x;
+        flyWheelLeft.set(left);
+        flyWheelRight.set(right);
     }
 }

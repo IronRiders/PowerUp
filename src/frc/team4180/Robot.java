@@ -9,15 +9,16 @@ import static frc.team4180.Ports.*;
 
 public class Robot extends IterativeRobot {
 
-    private final LambdaJoystick joystick1 = new LambdaJoystick(0);
-    private final LambdaJoystick joystick2 = new LambdaJoystick(1);
 
-    public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING);
+    public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING_1, LEFT_DRIVING_2, RIGHT_DRIVING_1, RIGHT_DRIVING_2);
     public final CubeSucker cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
-    public final CubePusher cubePusher = new CubePusher(PISTON);
+    public final CubePusher cubePusher = new CubePusher(SOLENIOD_1, SOLENIOD_2);
     public final ADIS16448_IMU gyro = new ADIS16448_IMU();
     public final BuiltInAccelerometer roboRio = new BuiltInAccelerometer();
     public final PositioningSystem positioningSystem = new PositioningSystem(gyro, roboRio);
+
+    private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
+    private final LambdaJoystick joystick2 = new LambdaJoystick(1, cubeSucker::updateSpeed);
 
     public Autonomous autoRoutine;
 
@@ -25,25 +26,14 @@ public class Robot extends IterativeRobot {
     public void robotInit()
     {
         CameraServer.getInstance().startAutomaticCapture();
-        gyro = new ADIS16448_IMU();
-        accelerometer = new BuiltInAccelerometer();
 
-        driveTrain = new DriveTrain(LEFT_DRIVING, RIGHT_DRIVING); // what does LEFT_DRIVING and RIGHT_DRIVING do?
-        cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
-        cubePusher = new CubePusher(PISTON);
-        positioningSystem = new PositioningSystem(gyro, accelerometer);
-
-        joystick1 = new LambdaJoystick(0);
-        joystick2 = new LambdaJoystick(1);
-
-        joystick1.addButton(3, cubeSucker::blow, cubeSucker::neutral);
-        joystick1.addButton(1, cubeSucker::suck, cubeSucker::neutral);
-        joystick2.addButton(2, cubePusher::extend, cubePusher::reset);
+        joystick2.addButton(3, cubeSucker::blow, cubeSucker::neutral);
+        joystick2.addButton(1, cubeSucker::suck, cubeSucker::neutral);
+        joystick1.addButton(2, cubePusher::extend, cubePusher::reset);
     }
 
     @Override
     public void autonomousInit() {
-        // This is an example/not good routine. 10 is not an actual value
         autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
             System.out.println("Debug");
             return true;
@@ -58,6 +48,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         positioningSystem.increment();
+        joystick1.listen();
+        joystick2.listen();
     }
 
     @Override

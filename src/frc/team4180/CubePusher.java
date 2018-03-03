@@ -1,20 +1,20 @@
 package frc.team4180;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class CubePusher {
 
-    private final Solenoid upperPiston;
+    private final DoubleSolenoid upperPiston;
 
-    public CubePusher(final int port) {
-        upperPiston = new Solenoid(port);
+    public CubePusher(final int port1, final int port2) {
+        upperPiston = new DoubleSolenoid(port1, port2);
     }
 
     public void extend() {
-        upperPiston.set(true);
+        upperPiston.set(DoubleSolenoid.Value.kForward);
     }
 
     public void reset() {
-        upperPiston.set(false);
+        upperPiston.set(DoubleSolenoid.Value.kReverse);
     }
 }
