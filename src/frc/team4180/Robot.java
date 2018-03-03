@@ -40,10 +40,13 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
 
-        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
-            System.out.println("Debug");
-            return true;
-        });
+        AutoTime.start();
+        driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0.2));
+//        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
+//            System.out.println("Debug");
+//            return true;
+//        });
+
     }
 
     @Override

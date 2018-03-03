@@ -31,9 +31,10 @@ public class  CubeSucker {
     }
 
 
-    public void updateSpeed(final LambdaJoystick.ThrottlePosition throttlePosition) {
+    public void updateSpeed(final LambdaJoystick.ThrottlePosition throttlePosition){
         final double left = throttlePosition.y - throttlePosition.x;
-        final double right = -throttlePosition.y - throttlePosition.x;
+        final double right = -throttlePosition.y -  throttlePosition.x;
+
         flyWheelLeft.set(left);
         flyWheelRight.set(right);
     }
