@@ -1,4 +1,5 @@
 package frc.team4180;
+//test
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
@@ -38,12 +39,11 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        AutoTime.start();
-        driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0.2));
-//        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
-//            System.out.println("Debug");
-//            return true;
-//        });
+
+        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
+            System.out.println("Debug");
+            return true;
+        });
     }
 
     @Override
