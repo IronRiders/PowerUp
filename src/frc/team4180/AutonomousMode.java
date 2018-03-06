@@ -30,9 +30,9 @@ public class AutonomousMode {
      * @return the current autonomous mode, fetching the starting position from the dashboard
      */
     public static AutonomousMode getAutonomousMode() {
-        final String startingPositionString = SmartDashboard.getString("autonomous/selected_starting_position", null);
+        String startingPositionString = SmartDashboard.getString("autonomous/selected_starting_position", null);
         if(startingPositionString == null) {
-            throw new IllegalStateException("Invalid starting position from dashboard.");
+            startingPositionString = "CENTER";
         }
         final StartingPosition startingPosition = StartingPosition.valueOf(startingPositionString);
         return new AutonomousMode(matchDataPosition, startingPosition);
@@ -51,9 +51,12 @@ public class AutonomousMode {
                 matchDataPosition = SwitchPosition.RIGHT;
                 break;
             default:
-                throw new IllegalStateException("Invalid game data");
+                matchDataPosition =  null;
         }
+        if(matchDataPosition != null) {
+            SmartDashboard.putString("autonomous/switch_position", matchDataPosition.name());
 
+        }
         final StartingPosition[] startingPositions = StartingPosition.values();
         final String[] startingPositionNames = new String[startingPositions.length];
         for(int i = 0; i < startingPositions.length; i++) {

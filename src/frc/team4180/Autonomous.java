@@ -27,7 +27,7 @@ public class Autonomous {
 
         this.robot = robot;
         //THIS WILL NOT WORK YOU MUST CONVERT THE TYPES!
-        if (mode.startingPosition.equals(mode.switchPosition)){
+        if (mode.startingPosition.toString().equals(mode.switchPosition.toString())){
             addAction(() -> startDrive());
             addAction(() -> drive(141)); // Distances in inches, need to be reavaluated w/ encoders thought about, and tested.
             addAction(() -> startTurn());
@@ -35,7 +35,7 @@ public class Autonomous {
             addAction(() -> startDrive());
             addAction(() -> drive(36));
             addAction(() -> depositBlock());
-        } else if (! mode.startingPosition.equals(mode.switchPosition)) {
+        } else if (! mode.startingPosition.toString().equals(mode.switchPosition.toString())) {
             addAction(() -> startDrive());
             addAction(() -> drive(216));
             addAction(() -> startTurn());
