@@ -40,58 +40,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-     //   yaw = gyro.getYaw();
 
-       // SmartDashboard.putNumber("time", 150);
-        //AutoTime.start();
-
-        driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,-0.3));//-0.2 good
-      //  autoMode = AutonomousMode.getAutonomousMode();
-        //autoMode.initialize();
-////        autoRoutine = new Autonomous(this, () -> autoRoutine.drive(10), () -> {
-////            System.out.println("Debug");
-////            return true;
-////        });
-//        boolean isRightSide = autoMode.startingPosition.
-//        autoRoutine = new Autonomous(autoMode, this, )
     }
 
     @Override
     public void autonomousPeriodic() {
-        //boolean turn = autoMode.startingPosition.toString().equals(autoMode.switchPosition.toString());
-
-//        if (turn) {
-//            boolean right = true ;//autoMode.startingPosition.equals("LEFT");
-//            double degree = right ? 90 : -90;
-//            if (Math.abs(gyro.getYaw() - yaw - degree) < 7) {
-//                driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0.35, 0));
-        if (AutoTime.get()>10) {
-            driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,-0.4 ));
-        }
-
-//            }
-        /*
-        boolean rightPosition = SmartDashboard.getBoolean("right", false);
-        boolean switchRight = false;
-        switch(DriverStation.getInstance().getGameSpecificMessage().charAt(0)) {
-            case 'L':
-                switchRight = false;
-                break;
-            case 'R':
-                switchRight = true;
-                break;
-        }
-
-        if(rightPosition == switchRight && firstPush){
-            cubePusher.extend();
-            firstPush = false;
-        }
-        else{
-            driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0));
-
-        } */
-        //autoRoutine.run();
-
+        driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0.2,0));
     }
 
 
