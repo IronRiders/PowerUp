@@ -27,16 +27,16 @@ public class DriveTrain {
         rightMotor1.set(right);
         rightMotor2.set(right);
 
-        SmartDashboard.putString("DB/String 1","V 3");
-        SmartDashboard.putString("DB/String 4",getDistance()+"");
+        SmartDashboard.putString("DB/String 1","V 4");
+        SmartDashboard.putString("DB/String 2","dist "+getDistance());
 
     }
 
     public double getDistance() {
-        return enco.getRaw()*0.0002661;
+        return enco.getRaw()*-0.0002661;
     }
 
     public void reset() {
-
+        enco.reset();
     }
 }

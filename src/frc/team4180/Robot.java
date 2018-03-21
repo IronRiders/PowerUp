@@ -27,8 +27,7 @@ public class Robot extends IterativeRobot {
     private boolean firstPush = true;
 
     @Override
-    public void robotInit()
-    {
+    public void robotInit() {
         CameraServer.getInstance().startAutomaticCapture();
 
         joystick2.addButton(2, cubeSucker::blow, cubeSucker::neutral);
@@ -40,12 +39,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-
+        boolean switchRight = (DriverStation.getInstance().getGameSpecificMessage().charAt(0)) == 'R';
+        boolean isRight = SmartDashboard.getString("DB/String 9","Left").charAt(0) == 'R';
+        autoRoutine = new Autonomous(this, isRight,switchRight);
     }
 
     @Override
     public void autonomousPeriodic() {
-        driveTrain.updateSpeed(new LambdaJoystick.ThrottlePosition(0,0.2,0));
+        autoRoutine.run();
     }
 
 
