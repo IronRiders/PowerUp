@@ -9,7 +9,6 @@ import static frc.team4180.Ports.*;
 
 public class Robot extends IterativeRobot {
 
-
     public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING_1, LEFT_DRIVING_2, RIGHT_DRIVING_1, RIGHT_DRIVING_2);
     public final CubeSucker cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
     public final CubePusher cubePusher = new CubePusher(SOLENIOD_1, SOLENIOD_2);
@@ -29,6 +28,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         CameraServer.getInstance().startAutomaticCapture();
+        updateSmartDB();
 
         joystick2.addButton(2, cubeSucker::blow, cubeSucker::neutral);
         joystick2.addButton(1, cubeSucker::suck, cubeSucker::neutral);
@@ -60,5 +60,11 @@ public class Robot extends IterativeRobot {
         positioningSystem.increment();
         joystick1.listen();
         joystick2.listen();
+    }
+
+    private void updateSmartDB(){
+        SmartDashboard.putString("DB/String 2", "OPPOSITE MODE (B/S/L)");
+        SmartDashboard.putString("DB/String 3", "SAME MODE (F/T) --->");
+        SmartDashboard.putString("DB/String 4", "START POSITION (R/L) --->");
     }
 }

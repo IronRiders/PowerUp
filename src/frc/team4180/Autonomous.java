@@ -3,6 +3,7 @@ package frc.team4180;
 import java.util.Stack;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team4180.LambdaJoystick.ThrottlePosition;
 
@@ -10,26 +11,27 @@ public class Autonomous {
 
     private Stack<BooleanSupplier> actions; // true to halt, false to continue
     private final Robot robot;
+    private Timer autoTime;
     private final double speed = 0.3; // Motor power
     private final double turnSpeed = 0.6; // Motor power
 
-
-    //THIS WILL NOT WORK YOU MUST CONVERT THE TYPES!
     Autonomous(Robot robot, boolean isRightSide, boolean switchRight, char same, char opp){
         int turnAngle = isRightSide ? -1 : 1;
         this.robot = robot;
         robot.cubePusher.reset();
         this.actions = new Stack<>();
+        autoTime = new Timer();
+        String autoMode = "None";
+
         if(isRightSide==switchRight){
-            if(same=='F') {
-                SmartDashboard.putString("DB/String 6","Just Forward - "+ (isRightSide ? "Right":"Left"));
+            if (same == 'F') {
+                autoMode = "[S] Just Forward";
                 addAction(() -> depositBlock());
                 addAction(() -> drive(6.5));
                 addAction(() -> startDrive());
             }
             else if (same == 'T'){
-                SmartDashboard.putString("DB/String 6","Forward & Turn - "+ (isRightSide ? "Right":"Left"));
-
+                autoMode = "[S] Forward & Turn";
                 addAction(() -> depositBlock());
                 addAction(() -> turn(turnAngle*70,turnAngle));
                 addAction(() -> startTurn());
@@ -38,18 +40,19 @@ public class Autonomous {
             }
         }else {
             if(opp == 'B'){
-                SmartDashboard.putString("DB/String 6","Baseline - "+ (isRightSide ? "Right":"Left"));
-
+                autoMode = "[O] Baseline";
                 addAction(() -> drive(6));
                 addAction(() -> startDrive());
             }
             else if(opp == 'S'){
-                SmartDashboard.putString("DB/String 6","Sort Track - "+ (isRightSide ? "Right":"Left"));
+                autoMode = "[O] Sort Track";
             }
             else if(opp == 'L'){
-                SmartDashboard.putString("DB/String 6","Long Track - "+ (isRightSide ? "Right":"Left"));
+                autoMode = "[O] Long Track";
             }
         }
+        autoMode = autoMode + " - " + (isRightSide ? "Right" : "Left");
+        SmartDashboard.putString("DB/String 6", autoMode);
     }
 
     public void run() {
@@ -59,7 +62,7 @@ public class Autonomous {
                 actions.pop();
             }
         }catch (Exception e){
-
+            updateDB("Done");
         }
     }
 
@@ -68,7 +71,7 @@ public class Autonomous {
     }
 
     public boolean drive(final double distance) {
-        SmartDashboard.putString("DB/String 5", "drive "+ distance);
+        updateDB("Driving: " + distance);
         if(robot.driveTrain.getDistance() < distance) {
             robot.driveTrain.updateSpeed(new ThrottlePosition(0, -speed));
             return false;
@@ -79,8 +82,8 @@ public class Autonomous {
 
     public boolean turn(double degrees, int direction) {
         double turn = Math.abs(robot.gyro.getAngleZ() - degrees);
-        SmartDashboard.putString("DB/String 5", "turn " + turn);
-        if( turn > 5) {
+        updateDB("Turning: " + turn);
+        if(turn > 5) {
             robot.driveTrain.updateSpeed(new ThrottlePosition(turnSpeed*direction, 0));
             return false;
         }
@@ -88,20 +91,39 @@ public class Autonomous {
         return true;
     }
 
+    public boolean wait(double seconds){
+        double time = autoTime.get();
+        updateDB("Waiting " + seconds + " - " + time);
+        return seconds < time;
+    }
+
     public boolean depositBlock() {
+        updateDB("Depositing Cube");
         robot.cubePusher.extend();
         return true;
     }
 
     public boolean startDrive() {
-        SmartDashboard.putString("DB/String 5", "start drive");
+        updateDB("Start Drive");
         robot.driveTrain.reset();
         return true;
     }
 
     public boolean startTurn() {
+        updateDB("Start Turn");
         robot.gyro.reset();
         return true;
+    }
+
+    public boolean startWait() {
+        updateDB("Start Wait");
+        autoTime.reset();
+        autoTime.start();
+        return true;
+    }
+
+    private void updateDB(String s){
+        SmartDashboard.putString("DB/String 5", s);
     }
 
 }

@@ -8,7 +8,7 @@ public class  CubeSucker {
     private final SpeedController flyWheelLeft, flyWheelRight;
     private final double speed = 0.5;
 
-    public CubeSucker(final int leftPort, final int rightPort) {
+    CubeSucker(final int leftPort, final int rightPort) {
         flyWheelLeft = new Spark(leftPort);
         flyWheelRight = new Spark(rightPort);
     }

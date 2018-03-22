@@ -6,7 +6,7 @@ public class CubePusher {
 
     private final DoubleSolenoid upperPiston;
 
-    public CubePusher(final int port1, final int port2) {
+    CubePusher(final int port1, final int port2) {
         upperPiston = new DoubleSolenoid(port1, port2);
     }
 
