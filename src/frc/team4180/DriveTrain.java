@@ -27,8 +27,7 @@ public class DriveTrain {
         rightMotor1.set(right);
         rightMotor2.set(right);
 
-        SmartDashboard.putString("DB/String 1","V 4");
-        SmartDashboard.putString("DB/String 2","dist "+getDistance());
+        SmartDashboard.putString("DB/String 0","V 5");
 
     }
 

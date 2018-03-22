@@ -51,9 +51,9 @@ public class PositioningSystem {
         position = Vector.add(position, avgVelocity);
         SmartDashboard.putNumber("speed", Math.sqrt(dVelocity.x*dVelocity.x+ dVelocity.y*dVelocity.y));
         SmartDashboard.putNumber("acceleration", Math.sqrt(acceleration.x*acceleration.x + acceleration.y*acceleration.y ));
-        SmartDashboard.putString("DB/String 0", Double.toString(position.x));
-        SmartDashboard.putString("DB/String 1", Double.toString(position.y));
-        SmartDashboard.putString("DB/String 2", Double.toString(position.z));
+    //    SmartDashboard.putString("DB/String 0", Double.toString(position.x));
+    //    SmartDashboard.putString("DB/String 1", Double.toString(position.y));
+    //    SmartDashboard.putString("DB/String 2", Double.toString(position.z));
     }
 
     private static class Vector {

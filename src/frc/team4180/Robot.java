@@ -41,7 +41,11 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
         boolean switchRight = (DriverStation.getInstance().getGameSpecificMessage().charAt(0)) == 'R';
         boolean isRight = SmartDashboard.getString("DB/String 9","Left").charAt(0) == 'R';
-        autoRoutine = new Autonomous(this, isRight,switchRight);
+
+        char same = SmartDashboard.getString("DB/String 8","Straight").charAt(0);
+        char opp = SmartDashboard.getString("DB/String 7","Baseline").charAt(0);
+
+        autoRoutine = new Autonomous(this, isRight,switchRight,same, opp);
     }
 
     @Override

@@ -10,21 +10,45 @@ public class Autonomous {
 
     private Stack<BooleanSupplier> actions; // true to halt, false to continue
     private final Robot robot;
-    private double yaw; // Degrees
     private final double speed = 0.3; // Motor power
+    private final double turnSpeed = 0.6; // Motor power
 
 
     //THIS WILL NOT WORK YOU MUST CONVERT THE TYPES!
-    Autonomous(Robot robot, boolean isRightSide, boolean switchRight){
-        int turnAngle = isRightSide ? 90 : -90;
+    Autonomous(Robot robot, boolean isRightSide, boolean switchRight, char same, char opp){
+        int turnAngle = isRightSide ? -1 : 1;
         this.robot = robot;
         robot.cubePusher.reset();
-        this.yaw = robot.gyro.getYaw();
         this.actions = new Stack<>();
         if(isRightSide==switchRight){
-            addAction(()->depositBlock());
-            addAction(()->drive(6.5));
-            addAction(()->startDrive());
+            if(same=='F') {
+                SmartDashboard.putString("DB/String 6","Just Forward - "+ (isRightSide ? "Right":"Left"));
+                addAction(() -> depositBlock());
+                addAction(() -> drive(6.5));
+                addAction(() -> startDrive());
+            }
+            else if (same == 'T'){
+                SmartDashboard.putString("DB/String 6","Forward & Turn - "+ (isRightSide ? "Right":"Left"));
+
+                addAction(() -> depositBlock());
+                addAction(() -> turn(turnAngle*70,turnAngle));
+                addAction(() -> startTurn());
+                addAction(() -> drive(7));
+                addAction(() -> startDrive());
+            }
+        }else {
+            if(opp == 'B'){
+                SmartDashboard.putString("DB/String 6","Baseline - "+ (isRightSide ? "Right":"Left"));
+
+                addAction(() -> drive(6));
+                addAction(() -> startDrive());
+            }
+            else if(opp == 'S'){
+                SmartDashboard.putString("DB/String 6","Sort Track - "+ (isRightSide ? "Right":"Left"));
+            }
+            else if(opp == 'L'){
+                SmartDashboard.putString("DB/String 6","Long Track - "+ (isRightSide ? "Right":"Left"));
+            }
         }
     }
 
@@ -53,11 +77,14 @@ public class Autonomous {
         return true;
     }
 
-    public boolean turn(double degrees) {
-        if(Math.abs(robot.gyro.getYaw() - yaw - degrees) < 7) {
-            robot.driveTrain.updateSpeed(new ThrottlePosition(speed, 0));
+    public boolean turn(double degrees, int direction) {
+        double turn = Math.abs(robot.gyro.getAngleZ() - degrees);
+        SmartDashboard.putString("DB/String 5", "turn " + turn);
+        if( turn > 5) {
+            robot.driveTrain.updateSpeed(new ThrottlePosition(turnSpeed*direction, 0));
             return false;
         }
+        robot.driveTrain.updateSpeed(new ThrottlePosition(0, 0));
         return true;
     }
 
@@ -67,13 +94,13 @@ public class Autonomous {
     }
 
     public boolean startDrive() {
-        SmartDashboard.putString("DB/String 6", "start drive");
+        SmartDashboard.putString("DB/String 5", "start drive");
         robot.driveTrain.reset();
         return true;
     }
 
     public boolean startTurn() {
-        yaw = robot.gyro.getYaw();
+        robot.gyro.reset();
         return true;
     }
 
