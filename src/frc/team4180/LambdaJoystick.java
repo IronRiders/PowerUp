@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class LambdaJoystick extends Joystick {
     private Button[] buttons = new Button[11];
-    private Consumer<ThrottlePosition> joystickListener;
+    public Consumer<ThrottlePosition> joystickListener;
 
     /**
      * Create a new Joystick Listener using lambdas given the USB port and the throttle listener

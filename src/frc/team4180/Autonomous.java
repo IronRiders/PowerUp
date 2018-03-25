@@ -27,15 +27,26 @@ public class Autonomous {
             if (same == 'F') {
                 autoMode = "[S] Just Forward";
                 addAction(() -> depositBlock());
+                addAction(()-> waitTime(1.5));
+                addAction(()->startWait());
                 addAction(() -> drive(6.5));
                 addAction(() -> startDrive());
             }
             else if (same == 'T'){
                 autoMode = "[S] Forward & Turn";
                 addAction(() -> depositBlock());
-                addAction(() -> turn(turnAngle*70,turnAngle));
+                addAction(()-> waitTime(0.3));
+                addAction(()->startWait());
+                addAction(() -> drive(1));
+                addAction(() -> startDrive());
+                addAction(() -> turn(turnAngle*85,turnAngle));
                 addAction(() -> startTurn());
-                addAction(() -> drive(7));
+                addAction(() -> drive(10));
+                addAction(() -> startDrive());
+            }
+            else if(same == 'B'){
+                autoMode = "[O] Baseline";
+                addAction(() -> drive(6));
                 addAction(() -> startDrive());
             }
         }else {
@@ -46,9 +57,53 @@ public class Autonomous {
             }
             else if(opp == 'S'){
                 autoMode = "[O] Sort Track";
+                addAction(() -> depositBlock());
+                addAction(()-> waitTime(0.5));
+                addAction(()->startWait());
+
+                addAction(() -> drive(4));
+                addAction(() -> startDrive());
+
+                addAction(() -> turn(-turnAngle*85,-turnAngle));
+                addAction(() -> startTurn());
+
+                addAction(() -> drive(11));
+                addAction(() -> startDrive());
+
+                addAction(() -> turn(turnAngle*80,turnAngle));
+                addAction(() -> startTurn());
+
+                addAction(() -> drive(2));
+                addAction(() -> startDrive());
+
+                addAction(()-> waitTime(1.5));
+                addAction(()->startWait());
+
             }
             else if(opp == 'L'){
                 autoMode = "[O] Long Track";
+                addAction(() -> depositBlock());
+                addAction(()-> waitTime(1.5));
+                addAction(()->startWait());
+
+                addAction(() -> drive(2));
+                addAction(() -> startDrive());
+
+                addAction(() -> turn(turnAngle*85,turnAngle));
+                addAction(() -> startTurn());
+
+                addAction(() -> drive(4));
+                addAction(() -> startDrive());
+
+                addAction(() -> turn(turnAngle*85,turnAngle));
+                addAction(() -> startTurn());
+                addAction(() -> drive(17));
+                addAction(() -> startDrive());
+
+                addAction(() -> turn(turnAngle*95,turnAngle));
+                addAction(() -> startTurn());
+                addAction(() -> drive(15));
+                addAction(() -> startDrive());
             }
         }
         autoMode = autoMode + " - " + (isRightSide ? "Right" : "Left");
@@ -73,10 +128,10 @@ public class Autonomous {
     public boolean drive(final double distance) {
         updateDB("Driving: " + distance);
         if(robot.driveTrain.getDistance() < distance) {
-            robot.driveTrain.updateSpeed(new ThrottlePosition(0, -speed));
+            robot.driveTrain.DriveStraight(speed);
             return false;
         }
-        robot.driveTrain.updateSpeed(new ThrottlePosition(0, 0));
+        robot.driveTrain.lameDrive(new ThrottlePosition(0, 0));
         return true;
     }
 
@@ -84,14 +139,14 @@ public class Autonomous {
         double turn = Math.abs(robot.gyro.getAngleZ() - degrees);
         updateDB("Turning: " + turn);
         if(turn > 5) {
-            robot.driveTrain.updateSpeed(new ThrottlePosition(turnSpeed*direction, 0));
+            robot.driveTrain.lameDrive(new ThrottlePosition(turnSpeed*direction, 0));
             return false;
         }
-        robot.driveTrain.updateSpeed(new ThrottlePosition(0, 0));
+        robot.driveTrain.lameDrive(new ThrottlePosition(0, 0));
         return true;
     }
 
-    public boolean wait(double seconds){
+    public boolean waitTime(double seconds){
         double time = autoTime.get();
         updateDB("Waiting " + seconds + " - " + time);
         return seconds < time;
@@ -105,6 +160,7 @@ public class Autonomous {
 
     public boolean startDrive() {
         updateDB("Start Drive");
+        robot.gyro.reset();
         robot.driveTrain.reset();
         return true;
     }

@@ -9,16 +9,16 @@ import static frc.team4180.Ports.*;
 
 public class Robot extends IterativeRobot {
 
-    public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING_1, LEFT_DRIVING_2, RIGHT_DRIVING_1, RIGHT_DRIVING_2);
     public final CubeSucker cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
     public final CubePusher cubePusher = new CubePusher(SOLENIOD_1, SOLENIOD_2);
     public final ADIS16448_IMU gyro = new ADIS16448_IMU();
     public final BuiltInAccelerometer roboRio = new BuiltInAccelerometer();
     public final PositioningSystem positioningSystem = new PositioningSystem(gyro, roboRio);
+    public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING_1, LEFT_DRIVING_2, RIGHT_DRIVING_1, RIGHT_DRIVING_2, gyro);
     double yaw;
     AutonomousMode autoMode;
 //This a test
-    private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::updateSpeed);
+    private final LambdaJoystick joystick1 = new LambdaJoystick(0, driveTrain::lameDrive);
     private final LambdaJoystick joystick2 = new LambdaJoystick(1, cubeSucker::updateSpeed);
 
     public Autonomous autoRoutine;
@@ -31,8 +31,11 @@ public class Robot extends IterativeRobot {
         updateSmartDB();
 
         joystick2.addButton(2, cubeSucker::blow, cubeSucker::neutral);
-        joystick2.addButton(1, cubeSucker::suck, cubeSucker::neutral);
-        joystick1.addButton(1, cubePusher::extend, cubePusher::reset);
+        joystick2.addButton(3, cubeSucker::suck, cubeSucker::neutral);
+        joystick2.addButton(1, cubePusher::extend, cubePusher::reset);
+
+        joystick1.addButton(1, driveTrain::startRush, driveTrain::endRush);
+        //joystick1.addButton(3,()->{joystick1.joystickListener = driveTrain::lameDrive;},()->{joystick1.joystickListener = driveTrain::ballerDrive;});
 
         AutoTime = new Timer();
     }
@@ -45,7 +48,8 @@ public class Robot extends IterativeRobot {
         char same = SmartDashboard.getString("DB/String 8","Straight").charAt(0);
         char opp = SmartDashboard.getString("DB/String 7","Baseline").charAt(0);
 
-        autoRoutine = new Autonomous(this, isRight,switchRight,same, opp);
+       autoRoutine = new Autonomous(this, isRight, switchRight, same, opp);
+
     }
 
     @Override
@@ -64,7 +68,7 @@ public class Robot extends IterativeRobot {
 
     private void updateSmartDB(){
         SmartDashboard.putString("DB/String 2", "OPPOSITE MODE (B/S/L)");
-        SmartDashboard.putString("DB/String 3", "SAME MODE (F/T) --->");
+        SmartDashboard.putString("DB/String 3", "SAME MODE (B/F/T) --->");
         SmartDashboard.putString("DB/String 4", "START POSITION (R/L) --->");
     }
 }
