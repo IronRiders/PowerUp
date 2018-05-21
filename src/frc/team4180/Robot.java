@@ -9,6 +9,7 @@ import static frc.team4180.Ports.*;
 
 public class Robot extends IterativeRobot {
 
+	// Brendan was here!
     public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING_1, LEFT_DRIVING_2, RIGHT_DRIVING_1, RIGHT_DRIVING_2);
     public final CubeSucker cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
     public final CubePusher cubePusher = new CubePusher(SOLENIOD_1, SOLENIOD_2);
