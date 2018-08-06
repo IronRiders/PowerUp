@@ -29,11 +29,22 @@ public class DriveTrain {
 
     }
 
+    public void updateSpeedMotionProfiler(double left , double right){
+        leftMotor1.set(left);
+        leftMotor2.set(left);
+        rightMotor1.set(right);
+        rightMotor2.set(right);
+    }
+
     public double getDistance() {
         return enco.getRaw()*-0.0002661;
     }
 
     public void reset() {
         enco.reset();
+    }
+
+    public Encoder getEncoder(){
+        return enco;
     }
 }
