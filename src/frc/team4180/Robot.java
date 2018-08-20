@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
     private final LambdaJoystick joystick2 = new LambdaJoystick(1, cubeSucker::updateSpeed);
 
     public Autonomous autoRoutine;
+    public MotionProfiling motionProfiling;
     public Timer AutoTime;
     private boolean firstPush = true;
 
@@ -40,18 +41,21 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        boolean switchRight = (DriverStation.getInstance().getGameSpecificMessage().charAt(0)) == 'R';
-        boolean isRight = SmartDashboard.getString("DB/String 9","Left").charAt(0) == 'R';
+        //boolean switchRight = (DriverStation.getInstance().getGameSpecificMessage().charAt(0)) == 'R';
+        //boolean isRight = SmartDashboard.getString("DB/String 9","Left").charAt(0) == 'R';
 
-        char same = SmartDashboard.getString("DB/String 8","Straight").charAt(0);
-        char opp = SmartDashboard.getString("DB/String 7","Baseline").charAt(0);
+        //char same = SmartDashboard.getString("DB/String 8","Straight").charAt(0);
+        //char opp = SmartDashboard.getString("DB/String 7","Baseline").charAt(0);
 
-        autoRoutine = new Autonomous(this, isRight,switchRight,same, opp);
+        //autoRoutine = new Autonomous(this, isRight,switchRight,same, opp);
+         motionProfiling = new MotionProfiling(this);
+
     }
 
     @Override
     public void autonomousPeriodic() {
-        autoRoutine.run();
+        //autoRoutine.run();
+        motionProfiling.pidLoop();
     }
 
 

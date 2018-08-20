@@ -1,5 +1,6 @@
 package frc.team4180;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;
@@ -8,28 +9,32 @@ import frc.team4180.LambdaJoystick.ThrottlePosition;
 import jaci.pathfinder.modifiers.TankModifier;
 import edu.wpi.first.wpilibj.*;
 
+import java.io.File;
+
 
 public class MotionProfiling {
     Robot robot;
-    Waypoint[] points;
     EncoderFollower left;
     EncoderFollower right;
     final double maxVelocity = 1.7; //change
-    final double maxAcceleration = 2.0; //change
-    final double maxJerk = 60.0; //change
+    //final double maxAcceleration = 2.0; //change
+    //final double maxJerk = 60.0; //change
     final double wheelbaseWidth = 0.5; //change
     final double wheelDiameter = 0.2032; //8 inches to meters
     final int numPulsesPerRevolution = 360; //????verify
-    AutonomousMode autoMode;
+    enum StartingPosition { LEFT, CENTER, RIGHT };
+    enum SwitchPosition { LEFT, RIGHT };
+    public  StartingPosition startingPosition;
+    public  SwitchPosition switchPosition;
     Encoder encoder;
 
-    public MotionProfiling(Robot robot, boolean startingRight, boolean switchRight){
-
+    public MotionProfiling(Robot robot){
         this.robot = robot;
-        this.points = setPoints(startingRight, switchRight);
         encoder = robot.driveTrain.getEncoder();
-        Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, maxVelocity, maxAcceleration, maxJerk);
-        Trajectory trajectory = Pathfinder.generate(this.points, config);
+        //Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, maxVelocity, maxAcceleration, maxJerk);
+        //Trajectory trajectory = Pathfinder.generate(this.points, config);
+        File myFile = initializeTrajectory();
+        Trajectory trajectory = Pathfinder.readFromCSV(myFile);
         TankModifier modifier = new TankModifier(trajectory).modify(wheelbaseWidth);
         encoder.reset();
         left.configureEncoder(0, numPulsesPerRevolution , wheelDiameter);
@@ -50,17 +55,42 @@ public class MotionProfiling {
         robot.driveTrain.updateSpeedMotionProfiler(desiredLeft + turn, desiredRight-turn);
     }
 
-    public Waypoint[] setPoints(boolean startingRight , boolean switchRight){
-        Waypoint[] points = new Waypoint[10];
-        if(startingRight == switchRight){
-            points[0] = new Waypoint(0,6.5,0);
-            // more points here ---- figure this out on another day
-
+    public File initializeTrajectory() {
+        switch (SmartDashboard.getString("DB/String 9", "Left").charAt(0)) {
+            case 'L':
+                startingPosition = StartingPosition.LEFT;
+                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
+                    switchPosition = switchPosition.LEFT;
+                    return new File("trajectories/lefttoleft_left_detailed.csv");
+                } else if(DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R'){
+                    switchPosition = SwitchPosition.RIGHT;
+                    return new File("trajectories/lefttoright_left_detailed.csv");
+                }
+                break;
+            case 'R':
+                startingPosition = StartingPosition.RIGHT;
+                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
+                    switchPosition = switchPosition.LEFT;
+                    return new File("trajectories/righttoleft_left_detailed.csv");
+                } else if(DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
+                    switchPosition = SwitchPosition.RIGHT;
+                    return new File("trajectories/righttoright_left_detailed.csv");
+                }
+                break;
+            case 'C':
+                startingPosition = StartingPosition.CENTER;
+                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
+                    switchPosition = switchPosition.LEFT;
+                    return new File("trajectories/centertoleft_left_detailed.csv");
+                } else if(DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
+                    switchPosition = SwitchPosition.RIGHT;
+                    return new File("trajectories/centertoright_left_detailed.csv");
+                }
+                break;
+            default:
+                startingPosition = StartingPosition.RIGHT;
         }
-        else{
-            // more points here
-        }
-        return points;
+        return new File("");
     }
 }
 
