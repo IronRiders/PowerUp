@@ -33,8 +33,8 @@ public class MotionProfiling {
         encoder = robot.driveTrain.getEncoder();
         //Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, maxVelocity, maxAcceleration, maxJerk);
         //Trajectory trajectory = Pathfinder.generate(this.points, config);
-        File myFile = initializeTrajectory();
-        Trajectory trajectory = Pathfinder.readFromCSV(myFile);
+        File file = initializeTrajectory();
+        Trajectory trajectory = Pathfinder.readFromCSV(file);
         TankModifier modifier = new TankModifier(trajectory).modify(wheelbaseWidth);
         encoder.reset();
         left.configureEncoder(0, numPulsesPerRevolution , wheelDiameter);
@@ -47,7 +47,7 @@ public class MotionProfiling {
     public void pidLoop(){
         double desiredLeft = left.calculate(encoder.get());
         double desiredRight = right.calculate(encoder.get());
-        double gyroHeading = robot.gyro.getAngleZ(); //this could be wrong, maybe we want angle x or y
+        double gyroHeading = robot.gyro.getAngleZ(); //this could be wrong
         double desiredHeading = Pathfinder.r2d(left.getHeading());
         double angleDifference = Pathfinder.boundHalfDegrees(desiredHeading - gyroHeading);
         double turn = 0.8 * (-1.0/80.0) * angleDifference;
