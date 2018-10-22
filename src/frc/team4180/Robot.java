@@ -9,7 +9,6 @@ import static frc.team4180.Ports.*;
 
 public class Robot extends IterativeRobot {
 
-	// Corinne is working on pathfinder!
     public final DriveTrain driveTrain = new DriveTrain(LEFT_DRIVING_1, LEFT_DRIVING_2, RIGHT_DRIVING_1, RIGHT_DRIVING_2);
     public final CubeSucker cubeSucker = new CubeSucker(LEFT_FLY_WHEEL, RIGHT_FLY_WHEEL);
     public final CubePusher cubePusher = new CubePusher(SOLENIOD_1, SOLENIOD_2);
@@ -49,6 +48,7 @@ public class Robot extends IterativeRobot {
 
         //autoRoutine = new Autonomous(this, isRight,switchRight,same, opp);
          motionProfiling = new MotionProfiling(this);
+         motionProfiling.pidLoop();
 
     }
 
@@ -62,14 +62,15 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         SmartDashboard.putNumber("time", 150);
-        positioningSystem.increment();
+        //positioningSystem.increment();
         joystick1.listen();
         joystick2.listen();
     }
 
     private void updateSmartDB(){
-        SmartDashboard.putString("DB/String 2", "OPPOSITE MODE (B/S/L)");
-        SmartDashboard.putString("DB/String 3", "SAME MODE (F/T) --->");
+        //SmartDashboard.putString("DB/String 2", "OPPOSITE MODE (B/S/L)");
+        //SmartDashboard.putString("DB/String 3", "SAME MODE (F/T) --->");
+        SmartDashboard.putString("DB/String 3", "SWITCH POSITION (FOR TEST) --->");
         SmartDashboard.putString("DB/String 4", "START POSITION (R/L) --->");
     }
 }

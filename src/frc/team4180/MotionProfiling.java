@@ -13,15 +13,14 @@ import java.io.File;
 
 
 public class MotionProfiling {
+    // units in meters
     Robot robot;
     EncoderFollower left;
     EncoderFollower right;
-    final double maxVelocity = 1.7; //change
-    //final double maxAcceleration = 2.0; //change
-    //final double maxJerk = 60.0; //change
-    final double wheelbaseWidth = 0.5; //change
+    final double maxVelocity = 2.042; //meters/second
+    final double wheelbaseWidth = 0.71; //0.71 meters is width of wheelbase
     final double wheelDiameter = 0.2032; //8 inches to meters
-    final int numPulsesPerRevolution = 360; //????verify
+    final int numPulsesPerRevolution = 1024; //????verify
     enum StartingPosition { LEFT, CENTER, RIGHT };
     enum SwitchPosition { LEFT, RIGHT };
     public  StartingPosition startingPosition;
@@ -31,8 +30,6 @@ public class MotionProfiling {
     public MotionProfiling(Robot robot){
         this.robot = robot;
         encoder = robot.driveTrain.getEncoder();
-        //Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.05, maxVelocity, maxAcceleration, maxJerk);
-        //Trajectory trajectory = Pathfinder.generate(this.points, config);
         File file = initializeTrajectory();
         Trajectory trajectory = Pathfinder.readFromCSV(file);
         TankModifier modifier = new TankModifier(trajectory).modify(wheelbaseWidth);
@@ -56,41 +53,46 @@ public class MotionProfiling {
     }
 
     public File initializeTrajectory() {
-        switch (SmartDashboard.getString("DB/String 9", "Left").charAt(0)) {
+        switch (SmartDashboard.getString("DB/String 9", "Right").charAt(0)) {
             case 'L':
                 startingPosition = StartingPosition.LEFT;
-                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
+                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'L') {
                     switchPosition = switchPosition.LEFT;
-                    return new File("trajectories/lefttoleft_left_detailed.csv");
-                } else if(DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R'){
+                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/left_left_left_detailed.csv")));
+                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/left_left_right_detailed.csv")));
+                    return new File("trajectories/left_left_source_detailed.csv");
+                } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R'|| SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
                     switchPosition = SwitchPosition.RIGHT;
-                    return new File("trajectories/lefttoright_left_detailed.csv");
+                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/left_right_left_detailed.csv")));
+                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/left_right_right_detailed.csv")));
+                    return new File("trajectories/left_right_source_detailed.csv");
+
                 }
                 break;
             case 'R':
                 startingPosition = StartingPosition.RIGHT;
-                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
+                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'L') {
                     switchPosition = switchPosition.LEFT;
-                    return new File("trajectories/righttoleft_left_detailed.csv");
-                } else if(DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
+                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_left_left_detailed.csv")));
+                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_left_right_detailed.csv")));
+                    return new File("trajectories/right_left_source_detailed.csv");
+
+                } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
                     switchPosition = SwitchPosition.RIGHT;
-                    return new File("trajectories/righttoright_left_detailed.csv");
-                }
-                break;
-            case 'C':
-                startingPosition = StartingPosition.CENTER;
-                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
-                    switchPosition = switchPosition.LEFT;
-                    return new File("trajectories/centertoleft_left_detailed.csv");
-                } else if(DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
-                    switchPosition = SwitchPosition.RIGHT;
-                    return new File("trajectories/centertoright_left_detailed.csv");
+                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
+                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
+                    return new File("trajectories/right_right_source_detailed.csv");
+
                 }
                 break;
             default:
                 startingPosition = StartingPosition.RIGHT;
+                switchPosition = SwitchPosition.RIGHT;
+                left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
+                right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
+                return new File("trajectories/right_right_source_detailed.csv");
         }
-        return new File("");
+        return new File("trajectories/right_right_source_detailed.csv");
     }
 }
 

@@ -3,6 +3,7 @@ package frc.team4180;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.team4180.LambdaJoystick.ThrottlePosition;
+import jaci.pathfinder.followers.EncoderFollower;
 
 public class DriveTrain {
 
@@ -47,4 +48,6 @@ public class DriveTrain {
     public Encoder getEncoder(){
         return enco;
     }
+
+
 }
