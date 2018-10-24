@@ -44,5 +44,17 @@
         <jarDirectory url="file://$USER_HOME$/wpilib/user/java/lib" recursive="true" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/Documents/Pathfinder-master/Pathfinder-Java/examples" />
+          <root url="file://$USER_HOME$/Documents/Pathfinder-master/Pathfinder-Java/src/main/java" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="examples" level="project" />
+    <orderEntry type="library" name="Pathfinder-Java-1.8" level="project" />
   </component>
 </module>
