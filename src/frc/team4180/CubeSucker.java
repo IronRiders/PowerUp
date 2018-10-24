@@ -12,13 +12,11 @@ public class  CubeSucker {
         flyWheelLeft = new Spark(leftPort);
         flyWheelRight = new Spark(rightPort);
     }
-
-    public void suck() {
-        spinWheels(speed);
-    }
+    // reduced intake motor speed for girls gen-- this is temporary
+    public void suck() { spinWheels(0.5*speed); }
 
     public void blow() {
-        spinWheels(-speed);
+        spinWheels(-0.5* speed);
     }
 
     public void neutral() {
