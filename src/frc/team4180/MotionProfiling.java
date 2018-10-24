@@ -20,8 +20,8 @@ public class MotionProfiling {
     final double maxVelocity = 2.042; //meters/second
     final double wheelbaseWidth = 0.71; //0.71 meters is width of wheelbase
     final double wheelDiameter = 0.2032; //8 inches to meters
-    final int numPulsesPerRevolution = 1024; //????verify
-    enum StartingPosition { LEFT, CENTER, RIGHT };
+    final int numPulsesPerRevolution = 96; //????verify
+    enum StartingPosition { LEFT, RIGHT };
     enum SwitchPosition { LEFT, RIGHT };
     public  StartingPosition startingPosition;
     public  SwitchPosition switchPosition;
@@ -52,6 +52,7 @@ public class MotionProfiling {
         robot.driveTrain.updateSpeedMotionProfiler(desiredLeft + turn, desiredRight-turn);
     }
 
+
     public File initializeTrajectory() {
         switch (SmartDashboard.getString("DB/String 9", "Right").charAt(0)) {
             case 'L':
@@ -77,13 +78,13 @@ public class MotionProfiling {
                     right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_left_right_detailed.csv")));
                     return new File("trajectories/right_left_source_detailed.csv");
 
-                } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
-                    switchPosition = SwitchPosition.RIGHT;
-                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
-                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
-                    return new File("trajectories/right_right_source_detailed.csv");
+                } //else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
+                    //switchPosition = SwitchPosition.RIGHT;
+                    //left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
+                    //right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
+                    //return new File("trajectories/right_right_source_detailed.csv");
 
-                }
+                //}
                 break;
             default:
                 startingPosition = StartingPosition.RIGHT;
