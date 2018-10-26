@@ -12,22 +12,12 @@ public class  CubeSucker {
         flyWheelLeft = new Spark(leftPort);
         flyWheelRight = new Spark(rightPort);
     }
-<<<<<<< Updated upstream
+
     // reduced intake motor speed for girls gen-- this is temporary
     public void suck() { spinWheels(0.5*speed); }
 
     public void blow() {
         spinWheels(-0.5* speed);
-=======
-
-    //reduce intake motor speed because of broken motor for girls gen
-    public void suck() {
-        spinWheels(0.5*speed);
-    }
-
-    public void blow() {
-        spinWheels(-speed * 0.5);
->>>>>>> Stashed changes
     }
 
     public void neutral() {
