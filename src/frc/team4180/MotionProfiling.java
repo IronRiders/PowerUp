@@ -69,26 +69,26 @@ public class MotionProfiling {
 
 
     public void initializeTrajectory() throws URISyntaxException , IOException{
-        Map<String, String> zipfsenv = new HashMap<>();
-        zipfsenv.put("create", "true");
+        //Map<String, String> zipfsenv = new HashMap<>();
+        //zipfsenv.put("create", "true");
         switch (SmartDashboard.getString("DB/String 9", "Right").charAt(0)) {
             case 'L':
                 startingPosition = StartingPosition.LEFT;
                 if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
-                    URI uri = MotionProfiling.class.getClassLoader().getResource("trajectories/left_left_left_detailed.csv").toURI();
-                    FileSystem zipfs = FileSystems.newFileSystem(uri, zipfsenv);
-                    File file = Paths.get(uri).toFile();
+                    URL url = MotionProfiling.class.getClassLoader().getResource("left_left_left_detailed.csv");
+                    //FileSystem zipfs = FileSystems.newFileSystem(uri, zipfsenv);
+                    File file = new File(url.getPath());
                     left = new EncoderFollower(Pathfinder.readFromCSV(file));
-                    uri = MotionProfiling.class.getClassLoader().getResource("trajectories/left_left_right_detailed.csv").toURI();
-                    zipfs = FileSystems.newFileSystem(uri, zipfsenv);
-                    file = Paths.get(uri).toFile();
+                    url = MotionProfiling.class.getClassLoader().getResource("trajectories/left_left_right_detailed.csv");
+                    //zipfs = FileSystems.newFileSystem(uri, zipfsenv);
+                    file = new File(url.getPath());
                     right = new EncoderFollower(Pathfinder.readFromCSV(file));
                 } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
-                    URL url = MotionProfiling.class.getClassLoader().getResource("trajectories/left_right_left_detailed.csv");
-                    File file = Paths.get(url.toURI()).toFile();
+                    URL url = MotionProfiling.class.getClassLoader().getResource("left_right_left_detailed.csv");
+                    File file = new File(url.getPath());
                     left = new EncoderFollower(Pathfinder.readFromCSV(file));
-                    url = MotionProfiling.class.getClassLoader().getResource("trajectories/left_right_right_detailed.csv");
-                    file = Paths.get(url.toURI()).toFile();
+                    url = MotionProfiling.class.getClassLoader().getResource("left_right_right_detailed.csv");
+                    file = new File(url.getPath());
                     right = new EncoderFollower(Pathfinder.readFromCSV(file));
 
                 }
