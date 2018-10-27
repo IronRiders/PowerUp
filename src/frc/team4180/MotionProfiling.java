@@ -40,6 +40,7 @@ public class MotionProfiling {
         this.robot = robot;
         encoder = robot.driveTrain.getEncoder();
         try{
+            SmartDashboard.putString("DB/String 1", "Tried to initialize trajectory");
             initializeTrajectory();
         }
         catch(Exception e){
@@ -69,35 +70,29 @@ public class MotionProfiling {
 
 
     public void initializeTrajectory() throws URISyntaxException , IOException{
-        //Map<String, String> zipfsenv = new HashMap<>();
-        //zipfsenv.put("create", "true");
-        switch (SmartDashboard.getString("DB/String 9", "Right").charAt(0)) {
+        SmartDashboard.putString("DB/String 1", "Entered initialize trajectory method");
+        switch (SmartDashboard.getString("DB/String 9","R").charAt(0)) {
             case 'L':
-                startingPosition = StartingPosition.LEFT;
+                SmartDashboard.putString("DB/String 1", "Entered Switch Statement L ");
                 if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
-                    URL url = MotionProfiling.class.getClassLoader().getResource("left_left_left_detailed.csv");
-                    //FileSystem zipfs = FileSystems.newFileSystem(uri, zipfsenv);
-                    File file = new File(url.getPath());
+                    SmartDashboard.putString("DB/String 1", "Got past game specific message");
+                    File file = new File("left_left_left_detailed.csv");
+                    SmartDashboard.putString("DB/String 1", "Got past file");
                     left = new EncoderFollower(Pathfinder.readFromCSV(file));
-                    url = MotionProfiling.class.getClassLoader().getResource("trajectories/left_left_right_detailed.csv");
-                    //zipfs = FileSystems.newFileSystem(uri, zipfsenv);
-                    file = new File(url.getPath());
+                    file = new File("");
                     right = new EncoderFollower(Pathfinder.readFromCSV(file));
                 } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
-                    URL url = MotionProfiling.class.getClassLoader().getResource("left_right_left_detailed.csv");
-                    File file = new File(url.getPath());
+                    File file = new File("left_right_left_detailed.csv");
                     left = new EncoderFollower(Pathfinder.readFromCSV(file));
-                    url = MotionProfiling.class.getClassLoader().getResource("left_right_right_detailed.csv");
-                    file = new File(url.getPath());
+                    file = new File("left_right_right_detailed.csv");
                     right = new EncoderFollower(Pathfinder.readFromCSV(file));
 
                 }
                 break;
             case 'R':
-                startingPosition = StartingPosition.RIGHT;
                 if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'L') {
-                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_left_left_detailed.csv")));
-                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_left_right_detailed.csv")));
+                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("right_left_left_detailed.csv")));
+                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("right_left_right_detailed.csv")));
                 } //else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
                     //switchPosition = SwitchPosition.RIGHT;
                     //left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
@@ -109,8 +104,8 @@ public class MotionProfiling {
             default:
                 startingPosition = StartingPosition.RIGHT;
                 switchPosition = SwitchPosition.RIGHT;
-                left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
-                right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
+                left = new EncoderFollower(Pathfinder.readFromCSV(new File("right_right_left_detailed.csv")));
+                right = new EncoderFollower(Pathfinder.readFromCSV(new File("right_right_right_detailed.csv")));
         }
         //return new File("trajectories/right_right_source_detailed.csv");
     }

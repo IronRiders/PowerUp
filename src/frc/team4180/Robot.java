@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
         //char opp = SmartDashboard.getString("DB/String 7","Baseline").charAt(0);
 
         //autoRoutine = new Autonomous(this, isRight,switchRight,same, opp);
+        SmartDashboard.putString("DB/String 1", "Got to auto beginning");
          motionProfiling = new MotionProfiling(this);
          motionProfiling.pidLoop();
 
