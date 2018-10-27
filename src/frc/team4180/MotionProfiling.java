@@ -41,7 +41,7 @@ public class MotionProfiling {
         encoder = robot.driveTrain.getEncoder();
         try{
             SmartDashboard.putString("DB/String 1", "Tried to initialize trajectory");
-            initializeTrajectory();
+            makeTrajectory();
         }
         catch(Exception e){
             System.out.println(e);
@@ -69,45 +69,66 @@ public class MotionProfiling {
     }
 
 
-    public void initializeTrajectory() throws URISyntaxException , IOException{
-        SmartDashboard.putString("DB/String 1", "Entered initialize trajectory method");
-        switch (SmartDashboard.getString("DB/String 9","R").charAt(0)) {
-            case 'L':
-                SmartDashboard.putString("DB/String 1", "Entered Switch Statement L ");
-                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
-                    SmartDashboard.putString("DB/String 1", "Got past game specific message");
-                    File file = new File("left_left_left_detailed.csv");
-                    SmartDashboard.putString("DB/String 1", "Got past file");
-                    left = new EncoderFollower(Pathfinder.readFromCSV(file));
-                    file = new File("");
-                    right = new EncoderFollower(Pathfinder.readFromCSV(file));
-                } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
-                    File file = new File("left_right_left_detailed.csv");
-                    left = new EncoderFollower(Pathfinder.readFromCSV(file));
-                    file = new File("left_right_right_detailed.csv");
-                    right = new EncoderFollower(Pathfinder.readFromCSV(file));
+//    public void initializeTrajectory() throws URISyntaxException , IOException{
+//        SmartDashboard.putString("DB/String 1", "Entered initialize trajectory method");
+//        switch (SmartDashboard.getString("DB/String 9","R").charAt(0)) {
+//            case 'L':
+//                SmartDashboard.putString("DB/String 1", "Entered Switch Statement L ");
+//                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L') {
+//                    SmartDashboard.putString("DB/String 1", "Got past game specific message");
+//                    File file = new File("left_left_left_detailed.csv");
+//                    SmartDashboard.putString("DB/String 1", "Got past file");
+//                    left = new EncoderFollower(Pathfinder.readFromCSV(file));
+//                    file = new File("");
+//                    right = new EncoderFollower(Pathfinder.readFromCSV(file));
+//                } else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R') {
+//                    File file = new File("left_right_left_detailed.csv");
+//                    left = new EncoderFollower(Pathfinder.readFromCSV(file));
+//                    file = new File("left_right_right_detailed.csv");
+//                    right = new EncoderFollower(Pathfinder.readFromCSV(file));
+//
+//                }
+//                break;
+//            case 'R':
+//                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'L') {
+//                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("right_left_left_detailed.csv")));
+//                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("right_left_right_detailed.csv")));
+//                } //else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
+//                    //switchPosition = SwitchPosition.RIGHT;
+//                    //left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
+//                    //right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
+//                    //return new File("trajectories/right_right_source_detailed.csv");
+//
+//                //}
+//                break;
+//            default:
+//                startingPosition = StartingPosition.RIGHT;
+//                switchPosition = SwitchPosition.RIGHT;
+//                left = new EncoderFollower(Pathfinder.readFromCSV(new File("right_right_left_detailed.csv")));
+//                right = new EncoderFollower(Pathfinder.readFromCSV(new File("right_right_right_detailed.csv")));
+//        }
+//        //return new File("trajectories/right_right_source_detailed.csv");
+//    }
+    public void makeTrajectory(){
+        Waypoint points[];
+        if((SmartDashboard.getString("DB/String 9","R").charAt(0) == 'L') &&  (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' )){
+            points = new Waypoint[] {new Waypoint(0.0 , 6.5  , 0), new Waypoint(2.0, 7.0 , Pathfinder.d2r(30)), new Waypoint(4.5 , 6.0 , Pathfinder.d2r(90))};
 
-                }
-                break;
-            case 'R':
-                if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'L' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'L') {
-                    left = new EncoderFollower(Pathfinder.readFromCSV(new File("right_left_left_detailed.csv")));
-                    right = new EncoderFollower(Pathfinder.readFromCSV(new File("right_left_right_detailed.csv")));
-                } //else if (DriverStation.getInstance().getGameSpecificMessage().charAt(0) == 'R' || SmartDashboard.getString("DB/String 8", "Right").charAt(0) == 'R') {
-                    //switchPosition = SwitchPosition.RIGHT;
-                    //left = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_left_detailed.csv")));
-                    //right = new EncoderFollower(Pathfinder.readFromCSV(new File("trajectories/right_right_right_detailed.csv")));
-                    //return new File("trajectories/right_right_source_detailed.csv");
-
-                //}
-                break;
-            default:
-                startingPosition = StartingPosition.RIGHT;
-                switchPosition = SwitchPosition.RIGHT;
-                left = new EncoderFollower(Pathfinder.readFromCSV(new File("right_right_left_detailed.csv")));
-                right = new EncoderFollower(Pathfinder.readFromCSV(new File("right_right_right_detailed.csv")));
         }
-        //return new File("trajectories/right_right_source_detailed.csv");
+        else if((SmartDashboard.getString("DB/String 9","R").charAt(0) == 'L') &&  (DriverStation.getInstance().getGameSpecificMessage().charAr(0) == 'R')){
+            points = new Waypoint[] {new Waypoint(0.0 , 6.5  , 0), new Waypoint(6.3, 3.2 , Pathfinder.d2r(85)), new Waypoint(4.5 , 1.2 , Pathfinder.d2r(-20)) ,new Waypoint(3.8 , 2.25 , Pathfinder.d2r(90)) };
+        }
+        else if((SmartDashboard.getString("DB/String 9","R").charAt(0) == 'R') &&  (DriverStation.getInstance().getGameSpecificMessage().charAr(0) == 'R')){
+            points = new Waypoint[] {new Waypoint(0.0 , 1.5  , 0.0), new Waypoint(3.6, 0.76 , Pathfinder.d2r(30)), new Waypoint(4.5 , 2.25 , Pathfinder.d2r(90))};
+        }
+        else{
+            points = new Waypoint[] {new Waypoint(0.0 , 1.5  , 0), new Waypoint(6.25, 4.25 , Pathfinder.d2r(90)), new Waypoint(4.5 , 7.25 , 0) , new Waypoint(3.75, 6.0 , Pathfinder.d2r(90))};
+        }
+            Trajectory.Config config = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_HIGH, 0.02, 2.042, 0.1472, 60.0);
+            Trajectory trajectory = Pathfinder.generate(points, config);
+            TankModifier modifier = new TankModifier(trajectory).modify(0.71);
+            left = modifer.getLeftTrajectory();
+            right = modifer.getRightTrajectory();
     }
 }
 
