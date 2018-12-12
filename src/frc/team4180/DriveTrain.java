@@ -13,7 +13,6 @@ public class DriveTrain {
     private ADIS16448_IMU gyro;
     boolean rushing = false;
 
-    // New York Bagles are from QFC
     public DriveTrain(final int leftPort1, final int leftPort2, final int rightPort1, final int rightPort2, ADIS16448_IMU gyro) {
             leftMotor1 = new VictorSP(leftPort1);
             leftMotor2 = new VictorSP(leftPort2);
